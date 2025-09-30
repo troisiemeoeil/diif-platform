@@ -60,7 +60,7 @@ export default function Details() {
       try {
         const response = await axios.get(`/api/stemdata?stemKey=${stemKey}`);
         console.log(response.data);
-        setStemDetails(response.data); 
+        setStemDetails(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -71,7 +71,7 @@ export default function Details() {
 
   if (!stemDetails) return null;
 
-  const stemInfoRaw = stemDetails; 
+  const stemInfoRaw = stemDetails;
   // Destructuring data to eliminate specific key/values
   const { Logs, _id, Latitude, Longitude, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
 
@@ -79,10 +79,6 @@ export default function Details() {
     key,
     value: String(value),
   }));
-
-  function handleTrack() {
-    alert("Sawmill data inserted");
-  }
 
   return (
     <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -127,7 +123,6 @@ export default function Details() {
         </Tabs>
 
         <DialogFooter>
-          <Button className="w-full hover:bg-red-700 cursor-pointer" onClick={handleTrack}>Track</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -143,6 +138,10 @@ export function StemLogsTable({ stemDetails }) {
   // Safely access the Logs array. No need for JSON.parse as it's an object now.
   let logs = stemDetails?.Logs || [];
 
+  function handleTrack() {
+    alert("Sawmill data inserted");
+  }
+
   if (logs.length === 0) {
     return <p className="text-gray-500 text-center py-4">No log information available for this stem.</p>;
   }
@@ -153,28 +152,30 @@ export function StemLogsTable({ stemDetails }) {
 
         // Flatten the log object for display in the table
         const transformedLogData = flattenLogData(log);
-        const logId = `log-${log.LogKey}`; 
+        const logId = `log-${log.LogKey}`;
 
         return (
           <AccordionItem className="w-[400px]" key={logId} value={logId}>
 
             <AccordionTrigger className="font-semibold text-left">
               Log Number: {log.LogKey} (Product: {log.ProductKey})
+
             </AccordionTrigger>
             <AccordionContent>
               <Table>
-                  <TableBody className="max-h-60 overflow-y-auto block">
-                    {transformedLogData.map((item) => (
-                      <TableRow key={item.key}>
-                        <TableCell className="w-[100%] font-medium text-gray-600">
-                          {item.key}
-                        </TableCell>
-                        <TableCell className="w-[100%] text-right font-mono">
-                          {item.value}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
+                <TableBody className="max-h-60 overflow-y-auto block">
+                  {transformedLogData.map((item) => (
+                    <TableRow key={item.key}>
+                      <TableCell className="w-[100%] font-medium text-gray-600">
+                        {item.key}
+                      </TableCell>
+                      <TableCell className="w-[100%] text-right font-mono">
+                        {item.value}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  <Button className="w-full my-5 hover:bg-red-700 cursor-pointer" onClick={handleTrack}>Track</Button>
+                </TableBody>
               </Table>
             </AccordionContent>
 
