@@ -174,9 +174,9 @@ export function StemLogsTable({ stemDetails }) {
                       </TableCell>
                     </TableRow>
                   ))}
-                  <Button className="w-full my-5 hover:bg-red-700 cursor-pointer" onClick={handleTrack}>Track</Button>
                 </TableBody>
               </Table>
+              <Button className="w-full my-5 hover:bg-red-700 cursor-pointer" onClick={handleTrack}>Track</Button>
             </AccordionContent>
 
           </AccordionItem>
