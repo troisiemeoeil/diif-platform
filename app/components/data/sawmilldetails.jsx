@@ -16,7 +16,7 @@ import ExampleWithLocalizationProvider from "./data-tables/sawmillTable"
 
 function Sawmilldetails() {
     return (
-        <Dialog modal={false}>
+        <Dialog  modal={false}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-100 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
             </DialogTrigger>
