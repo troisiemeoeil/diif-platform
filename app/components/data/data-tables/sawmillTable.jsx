@@ -4,6 +4,8 @@ import {
   useMaterialReactTable,
 
 } from 'material-react-table';
+import { Box, Button, IconButton } from '@mui/material';
+import { VisibilityOutlined } from '@mui/icons-material';
 
 
 const Example = () => {
@@ -25,6 +27,12 @@ const Example = () => {
     pageSize: 10,
   });
 
+
+  const handleViewDetails = (row) => {
+    // 🎯 Reverting alert() to console.log/custom UI due to environment restrictions
+    console.log(`Viewing details for row ID: ${row.original._id}`);
+    // Replace with navigation or modal logic in a real app
+  };
   //if you want to avoid useEffect, look at the React Query example instead
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +41,8 @@ const Example = () => {
       } else {
         setIsRefetching(true);
       }
+
+
 
       const url = new URL('/api/data', location.origin);
       url.searchParams.set(
@@ -54,6 +64,7 @@ const Example = () => {
           setData([]);
           setRowCount(0);
           // You might also want to show a user-facing error message here
+          alert("API Fetch Error: Please notify administrators.")
           return; // Stop execution
         }
 
@@ -77,7 +88,7 @@ const Example = () => {
     globalFilter, //re-fetch when global filter changes
     pagination.pageIndex, //re-fetch when page index changes
     pagination.pageSize, //re-fetch when page size changes
-    sorting, //re-fetch when sorting changes
+    sorting
   ]);
 
   const columns = useMemo(
@@ -118,20 +129,47 @@ const Example = () => {
         accessorKey: 'VButD',
         header: 'VButD',
       },
-      //end
     ],
     [],
   );
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    enableColumnFilterModes: true,
+    enableColumnActions: false,
+    enableColumnOrdering: true,
+    enableGrouping: true,
+    enableColumnPinning: true,
+    enableFacetedValues: true,
+    enableRowActions: true,
+    renderRowActions: ({ row, table }) => (
+      <Box sx={{ display: 'flex', gap: '4px' }}>
+
+        {/* You can add more actions here (e.g., Edit, Delete) */}
+        <Button
+          onClick={() => handleViewDetails(row)}
+          variant="outlined"
+          size="small"
+        >
+          Track
+        </Button>
+      </Box>
+    ),
     enableRowSelection: true,
-    getRowId: (row) => row.phoneNumber,
-    initialState: { showColumnFilters: true },
+    getRowId: (row) => row._id,
+    initialState: {
+     
+      columnPinning: {
+        left: ['mrt-row-expand', 'mrt-row-select'],
+        right: ['mrt-row-actions'],
+      },
+    },
     manualFiltering: true,
     manualPagination: true,
     manualSorting: true,
+    enableHiding: false,
+    enableFullScreenToggle: false,
     muiToolbarAlertBannerProps: isError
       ? {
         color: 'error',
