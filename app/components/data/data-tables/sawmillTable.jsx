@@ -5,7 +5,6 @@ import {
 
 } from 'material-react-table';
 import { Box, Button, IconButton } from '@mui/material';
-import { VisibilityOutlined } from '@mui/icons-material';
 
 
 const Example = () => {
@@ -81,7 +80,10 @@ const Example = () => {
       setIsLoading(false);
       setIsRefetching(false);
     };
-    fetchData();
+     const timeout = setTimeout(() => {
+        fetchData();
+    }, 300);
+     return () => clearTimeout(timeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     columnFilters, //re-fetch when column filters change
@@ -137,38 +139,59 @@ const Example = () => {
     columns,
     data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
     enableColumnFilterModes: true,
-    enableColumnActions: false,
     enableColumnOrdering: true,
     enableGrouping: true,
     enableColumnPinning: true,
+    enableColumnActions: true,
     enableFacetedValues: true,
     enableRowActions: true,
-    renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '4px' }}>
-
-        {/* You can add more actions here (e.g., Edit, Delete) */}
-        <Button
-          onClick={() => handleViewDetails(row)}
-          variant="outlined"
-          size="small"
-        >
-          Track
-        </Button>
-      </Box>
-    ),
-    enableRowSelection: true,
-    getRowId: (row) => row._id,
     initialState: {
-     
+      showColumnFilters: true,
+      showGlobalFilter: true,
       columnPinning: {
         left: ['mrt-row-expand', 'mrt-row-select'],
         right: ['mrt-row-actions'],
       },
     },
+    paginationDisplayMode: 'pages',
+    positionToolbarAlertBanner: 'bottom',
+    muiSearchTextFieldProps: {
+      size: 'small',
+      variant: 'standard',
+    },
+    muiPaginationProps: {
+      color: 'primary',
+      shape: 'rounded',
+      variant: 'outlined',
+    },
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '4px' }}>
+
+        {/* You can add more actions here (e.g., Edit, Delete) */}
+        <Button
+          onClick={() => handleViewDetails(row)}
+          variant="contained"
+          size="small"
+           sx={{ 
+            backgroundColor: 'black', 
+            color: 'white', 
+            '&:hover': { 
+              backgroundColor: '#333', // Slightly lighter black on hover
+            } 
+          }}
+        >
+          Track
+        </Button>
+      </Box>
+    ),
+
+    enableRowSelection: true,
+    getRowId: (row) => row._id,
+
     manualFiltering: true,
     manualPagination: true,
     manualSorting: true,
-    enableHiding: false,
+    enableHiding: true  ,
     enableFullScreenToggle: false,
     muiToolbarAlertBannerProps: isError
       ? {
@@ -176,10 +199,10 @@ const Example = () => {
         children: 'Error loading data',
       }
       : undefined,
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
+    onColumnFiltersChange: (updater) => setColumnFilters(updater),
+    onGlobalFilterChange: (updater) => setGlobalFilter(updater),
+    onPaginationChange: (updater) => setPagination(updater),
+    onSortingChange: (updater) => setSorting(updater),
     rowCount,
     state: {
       columnFilters,

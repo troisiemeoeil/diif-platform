@@ -301,13 +301,13 @@ export default function MapProvider({
             onClick={() => handleLayerSwitch("layer1")}
             className={`px-3 py-1 rounded ${activeLayer === "layer1" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
           >
-            Forest Stand View
+             FSV
           </Button>
           <Button
             onClick={() => handleLayerSwitch("layer2")}
             className={`px-3 py-1 rounded ${activeLayer === "layer2" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
           >
-            Forest Use Declaration View
+           FUDV
           </Button>
         </div>
         {children}

@@ -16,18 +16,18 @@ import ExampleWithLocalizationProvider from "./data-tables/sawmillTable"
 
 function Sawmilldetails() {
     return (
-        <Dialog>
+        <Dialog modal={false}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-100 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
             </DialogTrigger>
-            <DialogContent className="min-w-[85%] h-[80%] overflow-scroll z-100 p-2 m-0 overflow-x-hidden">
-                <DialogHeader className="hidden">
+            <DialogContent showCloseButton={false} className="min-w-[90%] h-[80%] overflow-scroll z-100 p-2 m-0 ">
+                <DialogHeader  className="hidden">
                     <DialogTitle>Sawmill list of logs</DialogTitle>
                     <DialogDescription>
                         Anyone who has this link will be able to view this.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 z-150">
                     <div className="grid flex-1 gap-2">
                         <ExampleWithLocalizationProvider />
                     </div>
