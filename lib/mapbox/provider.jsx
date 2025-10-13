@@ -6,7 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { MapContext } from "@/context/map-context";
 import dynamic from "next/dynamic";
 
-const Details = dynamic(() => import("@/app/components/data/details"), {
+const Details = dynamic(() => import("@/app/components/data/harvestingdetails"), {
   ssr: false,
 });
 
@@ -312,14 +312,14 @@ export default function MapProvider({
         </div>
         {children}
       </MapContext.Provider>
-      {!loaded && (
+      {!loaded ? (
         <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-[1000]">
           <div className="text-lg font-medium">Loading map...</div>
-
         </div>
+      ) : (
+        <Details />
       )}
 
-      <Details />
 
     </div>
   );
@@ -329,7 +329,7 @@ export default function MapProvider({
 function StemPopup({ stemKey, stemInfo, onOpen }) {
   return (
     <div style={{ padding: "8px 8px", width: "auto", borderRadius: "0" }}>
-    
+
       <div className="flex justify-between items-start">
         <div>
           <div className="flex flex-col ">
@@ -341,7 +341,7 @@ function StemPopup({ stemKey, stemInfo, onOpen }) {
           </div>
         </div>
         <ArrowUpRight
-  
+
           className="cursor-pointer p-1 bg-black text-white w-[35px] h-auto border-0 rounded-full hover:bg-gray-500"
           onClick={() => onOpen(stemKey, stemInfo)}
         />

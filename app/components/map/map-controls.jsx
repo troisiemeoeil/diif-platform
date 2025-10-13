@@ -6,7 +6,7 @@ import { useMap } from "@/context/map-context";
 import { Button } from "@/components/ui/button";
 
 
-export default function MapCotrols() {
+export default function MapControls() {
   const { map } = useMap();
 
   const zoomIn = () => {

@@ -12,41 +12,45 @@ import { useTheme } from "next-themes";
 
 import { useMap } from "@/context/map-context";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
 
 const STYLE_OPTIONS = [
-      {
+
+  {
     id: "satellite-streets-v12",
     label: "Satellite",
-    icon: <SatelliteIcon className="w-5 h-5" />,
-  },
-  {
-    id: "streets-v12",
-    label: "Map",
     icon: <MapIcon className="w-5 h-5" />,
+    image: "./satelitte.jpg"
+
   },
 
   {
     id: "outdoors-v12",
     label: "Terrain",
     icon: <TreesIcon className="w-5 h-5" />,
+    image: "./terrain.png"
   },
 
   {
     id: "light-v11",
     label: "Light",
     icon: <SunIcon className="w-5 h-5" />,
+    image: "./light.png"
+
   },
   {
     id: "dark-v11",
     label: "Dark",
     icon: <MoonIcon className="w-5 h-5" />,
+    image: "./dark.png"
+
   },
 ];
 
 export default function MapStyles() {
   const { map } = useMap();
   const { setTheme } = useTheme();
-  const [activeStyle, setActiveStyle] = useState("satellite-streets-v12");
+  const [activeStyle, setActiveStyle] = useState("streets-v12");
 
   const handleChange = (value) => {
     if (!map) return;
@@ -63,15 +67,19 @@ export default function MapStyles() {
   return (
     <aside className="absolute bottom-4 left-4 z-10">
       <Tabs value={activeStyle} onValueChange={handleChange}>
-        <TabsList className="bg-background shadow-lg">
+        <TabsList className="bg-background  h-full  shadow-xl">
           {STYLE_OPTIONS.map((style) => (
             <TabsTrigger
               key={style.id}
               value={style.id}
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-sm flex items-center sm:px-3 sm:py-1.5"
+              className="data-[state=active]:border-gray-300 data-[state=active]:border-2 data-[state=active]:margin-1 text-smflex flex-col items-center "
             >
-              {style.icon}
-              <span className="hidden sm:inline">{style.label}</span>
+              {/* <div className="">
+                {style.icon}
+              </div> */}
+              <img className="relative object-cover  w-18 h-18 rounded-lg" width="75" height="auto" src={style.image} />
+                <span className="hidden text-xs sm:inline">{style.label}</span>
+
             </TabsTrigger>
           ))}
         </TabsList>
