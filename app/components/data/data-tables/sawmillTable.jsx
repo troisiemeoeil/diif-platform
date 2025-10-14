@@ -27,12 +27,36 @@ const Example = () => {
   });
 
 
-  const handleViewDetails = (row) => {
+  const handleViewDetails = async (row) => {
     // 🎯 Reverting alert() to console.log/custom UI due to environment restrictions
     console.log(`Viewing details for row ID: ${row.original._id}`);
-    // Replace with navigation or modal logic in a real app
+    console.log(`Viewing details for row ID: ${row.original.Length}`);
+
+    const inputValues = {
+        length: row.original.Length,
+        volume: row.original.Volume,
+        vtop: row.original.VTopD,
+        buttD: row.original.ButtD
+    };
+
+    try {
+        const response = await fetch('/api/find-similar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inputValues)
+        });
+
+        const similarDocs = await response.json();
+        console.log(similarDocs);
+        
+        alert(`Closest Matche using VTopD and Lenght input value: ${JSON.stringify(similarDocs[0], null, 2) }`);
+    } catch (error) {
+        console.error("Error finding similar documents:", error);
+    }
+
   };
-  //if you want to avoid useEffect, look at the React Query example instead
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!data.length) {
@@ -69,6 +93,7 @@ const Example = () => {
 
         // If the response is OK (status 200), then proceed
         const json = await response.json();
+      
         setData(json.data);
         setRowCount(json.meta.totalRowCount);
       } catch (error) {

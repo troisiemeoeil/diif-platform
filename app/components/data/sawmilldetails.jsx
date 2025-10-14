@@ -10,7 +10,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
 import ExampleWithLocalizationProvider from "./data-tables/sawmillTable"
 
 
@@ -18,9 +17,9 @@ function Sawmilldetails() {
     return (
         <Dialog  modal={false}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-100 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
+                <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
             </DialogTrigger>
-            <DialogContent showCloseButton={false} className="min-w-[90%] h-[80%] overflow-scroll z-100 p-2 m-0 ">
+            <DialogContent showCloseButton={false} className="min-w-[90%] h-[90%] overflow-scroll z-30 p-2 m-0 ">
                 <DialogHeader  className="hidden">
                     <DialogTitle>Sawmill list of logs</DialogTitle>
                     <DialogDescription>
@@ -40,6 +39,7 @@ function Sawmilldetails() {
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>
+            
         </Dialog>
     )
 }
