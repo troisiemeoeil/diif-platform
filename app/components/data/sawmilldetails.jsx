@@ -10,6 +10,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+
+
 import ExampleWithLocalizationProvider from "./data-tables/sawmillTable"
 
 
@@ -31,9 +33,9 @@ function Sawmilldetails() {
                         <ExampleWithLocalizationProvider />
                     </div>
                 </div>
-                <DialogFooter className="sm:justify-end">
+                <DialogFooter className="sm:justify-end h-[10px]">
                     <DialogClose asChild>
-                        <Button type="button" className="cursor-pointer " variant="secondary">
+                        <Button type="button" className="cursor-pointe " variant="secondary">
                             Close
                         </Button>
                     </DialogClose>

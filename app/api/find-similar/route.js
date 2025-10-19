@@ -19,7 +19,7 @@ const findSimilar = async (input) => {
                         {
                             $pow: [{
                                 $subtract: [
-                                    { $toDouble: "$Logs.LogMeasurement.LogLength" }, // DB is in cm
+                                    { $toDouble: "$Logs.LogMeasurement.LogLength" }, // convert value to double type data
                                     { $divide: [{ $toDouble: inputLength }, 10] }  // Input is in mm, convert to cm
                                 ]
                             }, 2]
@@ -30,7 +30,7 @@ const findSimilar = async (input) => {
                         {
                             $pow: [{
                                 $subtract: [
-                                    { $toDouble: "$Logs.LogMeasurement.TopOb" }, // DB is in mm
+                                    { $toDouble: "$Logs.LogMeasurement.TopOb" }, // convert value to double type data
                                     { $divide: [{ $toDouble: inputVTopD }, 10] } // Input is in 0.1 mm, convert to mm
                                 ]
                             }, 2]

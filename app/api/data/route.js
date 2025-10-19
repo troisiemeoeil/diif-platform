@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 // 🎯 Using the actual import for clientPromise as requested
 import clientPromise from "@/lib/db/mongodb";
+import { ObjectId } from 'mongodb';
 
-// NOTE: The mock clientPromise definition has been removed since you are now importing the real one.
-
-// 🎯 Next.js App Router API Route Handler
 export async function GET(request) {
     if (process.env.NODE_ENV === 'development') {
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -25,14 +23,9 @@ export async function GET(request) {
     let dbData = [];
 
     try {
-        // 🎯 FIX: Connect to the 'sawmill' database
         const client = await clientPromise;
         const db = client.db("sawmill");
-        
-        // 🎯 FIX: Access the 'data' collection
         const collection = db.collection("data");
-
-        // 🎯 FIX: Removed stemKey check and query filter to fetch ALL data
         const document = await collection.find({}).toArray();
 
         if (!document || document.length === 0) {
@@ -113,10 +106,38 @@ export async function GET(request) {
     const startInt = parseInt(start) || 0;
     const sizeInt = parseInt(size) || 10;
     
-    // Return the response
     return NextResponse.json({
         data:
             dbData?.slice(startInt, startInt + sizeInt) ?? [],
         meta: { totalRowCount: dbData.length },
     });
+}
+
+export async function POST(request) {
+    try {
+        const { rowIds } = await request.json();
+
+        if (!rowIds || !Array.isArray(rowIds) || rowIds.length === 0) {
+            return NextResponse.json({ error: 'rowIds are required' }, { status: 400 });
+        }
+
+        const client = await clientPromise;
+        const db = client.db("sawmill");
+        const collection = db.collection("data");
+
+        // Convert string IDs to MongoDB ObjectIds
+        const objectIds = rowIds.map(id => new ObjectId(id));
+
+        // Find documents that match the array of ObjectIds
+        const documents = await collection.find({ _id: { $in: objectIds } }).toArray();
+
+        return NextResponse.json(documents);
+
+    } catch (error) {
+        console.error("Error fetching selected rows:", error);
+        return NextResponse.json(
+            { error: "Internal Server Error during selected data fetch" },
+            { status: 500 }
+        );
+    }
 }

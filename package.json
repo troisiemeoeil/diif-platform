@@ -31,6 +31,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dayjs": "^1.11.18",
+    "export-to-csv": "^1.4.0",
     "lucide-react": "^0.543.0",
     "mapbox-gl": "^3.15.0",
     "material-react-table": "^3.2.1",
