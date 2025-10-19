@@ -289,7 +289,7 @@ const Example = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Stem Key</TableHead>
-                        <TableHead>Min Sim Score</TableHead>
+                        <TableHead>Min. Sim. Score</TableHead>
                         <TableHead>Best Log (L/T)</TableHead>
                         <TableHead>Coordinates</TableHead>
                       </TableRow>
