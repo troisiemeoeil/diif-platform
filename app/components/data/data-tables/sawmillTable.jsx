@@ -289,7 +289,7 @@ const Example = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Stem Key</TableHead>
-                        <TableHead>Min Score</TableHead>
+                        <TableHead>Min Sim Score</TableHead>
                         <TableHead>Best Log (L/T)</TableHead>
                         <TableHead>Coordinates</TableHead>
                       </TableRow>
@@ -317,7 +317,7 @@ const Example = () => {
                   <span>Similar stem found for this log will be displayed here.</span>
                 )}
               </DialogDescription>
-              <Button variant='outlined' onClick={handleExternalSearch}>View Stem On Map</Button>
+              <Button variant='outlined' onClick={handleExternalSearch}>View Stemgit  On Map</Button>
 
             </DialogHeader>
           </DialogContent>
