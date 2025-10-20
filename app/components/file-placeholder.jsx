@@ -166,7 +166,7 @@ export default function FileUpload04() {
             variant="outline"
             className="whitespace-nowrap"
             onClick={resetFile}
-            disabled={!file}
+            disabled={!file }
           >
             Cancel
           </Button>
@@ -174,6 +174,7 @@ export default function FileUpload04() {
             type="submit"
             className="whitespace-nowrap"
             disabled={!file || uploading || progress < 100}
+            onClick={() => alert("File Upload Successfully!")}
           >
             Upload
           </Button>
