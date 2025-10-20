@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
+import { useControlSawmillModal } from '@/lib/state/store';
 import {
   Table,
   TableBody,
@@ -223,11 +223,14 @@ const Example = () => {
     [],
   );
 
+  const setOpenState = useControlSawmillModal((s) => s.setOpenModal);
+
   const handleExternalSearch = () => {
     // This is the key: tell the table instance to update its global filter state.
     // This change propagates to the 'globalFilter' state, which is a dependency
     // of your useEffect, triggering a new data fetch.
-    table.setGlobalFilter("68ecf322d9248896e4b0d446");
+    setOpenState(false)
+    // table.setGlobalFilter("68ecf322d9248896e4b0d446");
   };
 
   const table = useMaterialReactTable({
@@ -287,7 +290,7 @@ const Example = () => {
 
                   <Table >
                     <TableHeader>
-                      <TableRow>
+                      <TableRow className="bg-gray-200 ">
                         <TableHead>Stem Key</TableHead>
                         <TableHead>Min. Sim. Score</TableHead>
                         <TableHead>Best Log (L/T)</TableHead>
@@ -317,7 +320,7 @@ const Example = () => {
                   <span>Similar stem found for this log will be displayed here.</span>
                 )}
               </DialogDescription>
-              <Button variant='outlined' onClick={handleExternalSearch}>View Stemgit  On Map</Button>
+              <Button variant='outlined' onClick={handleExternalSearch}>View Stem On Map</Button>
 
             </DialogHeader>
           </DialogContent>

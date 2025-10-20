@@ -80,6 +80,8 @@ export default function Details() {
     value: String(value),
   }));
 
+
+
   return (
     <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
       <DialogContent className="max-w-fit">
