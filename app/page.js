@@ -7,6 +7,7 @@ import MapStyles from "./components/map/map-styles";
 import MapControls from "./components/map/map-controls";
 import { Button } from "@/components/ui/button";
 import Sawmilldetails from "./components/data/sawmilldetails";
+import CsvUploader from "./components/csv-uploader";
 
 export default function Home() {
   const mapContainerRef = useRef(null);
@@ -31,9 +32,9 @@ export default function Home() {
         }}
 
       >
-          <MapStyles />
-          <Sawmilldetails />
-      
+        <MapStyles />
+        <Sawmilldetails />
+        <CsvUploader />
         <MapControls />
 
       </MapProvider>

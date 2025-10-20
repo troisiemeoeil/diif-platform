@@ -394,7 +394,6 @@ const Example = () => {
                 <TableHead>TRgRvc</TableHead>
                 <TableHead>ButtD</TableHead>
                 <TableHead>VTopD</TableHead>
-                <TableHead>ButtD</TableHead>
                 <TableHead>VMidD</TableHead>
                 <TableHead>VButD</TableHead>
 
@@ -406,6 +405,7 @@ const Example = () => {
                 <TableCell>{row.original.TRgRvc}</TableCell>
                 <TableCell>{row.original.ButtD}</TableCell>
                 <TableCell>{row.original.VTopD} </TableCell>
+                  <TableCell>{row.original.VMidD} </TableCell>
                 <TableCell>{row.original.VButD}</TableCell>
               </TableRow>
 
