@@ -11,17 +11,20 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 
+import {useState } from "react"
 
 import ExampleWithLocalizationProvider from "./data-tables/sawmillTable"
 
 
 function Sawmilldetails() {
+    const [onOpen, setOnOpen] = useState(null)
     return (
-        <Dialog  modal={false}>
+        <Dialog onChangeOpen={setOnOpen}  modal={false}>
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
             </DialogTrigger>
             <DialogContent showCloseButton={false} className="min-w-[90%] h-[90%] overflow-scroll z-30 p-2 m-0 ">
+                <Button onClick={() => {setOnOpen(false)}}>Close Dia</Button>
                 <DialogHeader  className="hidden">
                     <DialogTitle>Sawmill list of logs</DialogTitle>
                     <DialogDescription>

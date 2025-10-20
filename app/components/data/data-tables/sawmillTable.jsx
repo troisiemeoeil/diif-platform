@@ -340,6 +340,7 @@ const Example = () => {
           disabled={Object.keys(rowSelection).length === 0}
           onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
           className='items-center gap-2'
+          variant='outlined'
         >
           Export All Data
           <FileDownIcon size="20" />
