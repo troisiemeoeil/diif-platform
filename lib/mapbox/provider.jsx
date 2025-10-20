@@ -40,7 +40,8 @@ export default function MapProvider({
 
   useEffect(() => {
     if (!mapContainerRef.current || map.current) return;
-
+    console.log(initialViewState);
+    
     map.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/standard-satellite",
@@ -82,6 +83,7 @@ export default function MapProvider({
         map.current.addSource('diif', {
           type: 'geojson',
           data: '/GeoCoor.geojson',
+          promoteId: "StemKey",
           cluster: true,
           clusterMaxZoom: 14,
           clusterRadius: 40
@@ -92,6 +94,7 @@ export default function MapProvider({
           id: 'clusters',
           type: 'circle',
           source: 'diif',
+          
           filter: ['has', 'point_count'],
           paint: {
             'circle-color': [
@@ -134,7 +137,12 @@ export default function MapProvider({
           source: 'diif',
           filter: ['!', ['has', 'point_count']],
           paint: {
-            'circle-color': '#11b4da',
+            'circle-color': [
+              'case',
+              ['boolean', ['feature-state', 'highlight'], false], 
+              '#ff0000', 
+              '#34a8cf' 
+            ],
             'circle-radius': 4,
             'circle-stroke-width': 1,
             'circle-stroke-color': '#fff',
@@ -301,15 +309,15 @@ export default function MapProvider({
             onClick={() => handleLayerSwitch("layer1")}
             className={`px-3 py-1 rounded ${activeLayer === "layer1" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
           >
-             FSV
+            FSV
           </Button>
           <Button
             onClick={() => handleLayerSwitch("layer2")}
             className={`px-3 py-1 rounded ${activeLayer === "layer2" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
           >
-           FUDV
+            FUDV
           </Button>
-          
+
         </div>
         {children}
       </MapContext.Provider>

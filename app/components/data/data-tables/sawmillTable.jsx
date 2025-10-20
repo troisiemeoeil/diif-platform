@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
 
 } from 'material-react-table';
-import { Box, Button, CircularProgress, IconButton } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, Typography } from '@mui/material';
 import {
   Dialog,
   DialogContent,
@@ -24,10 +24,11 @@ import {
 } from "@/components/ui/table";
 import { FileDownIcon } from 'lucide-react';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { useMap } from "@/context/map-context";
 
 
 const Example = () => {
-  //data and fetching state
+
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -199,38 +200,58 @@ const Example = () => {
         accessorKey: 'Volume',
         header: 'Volume',
       },
-      {
-        accessorKey: 'TRgRvc',
-        header: 'TRgRvc',
-      },
-      {
-        accessorKey: 'ButtD',
-        header: 'ButtD',
-      },
-      {
-        accessorKey: 'VTopD',
-        header: 'VTopD',
-      },
-      {
-        accessorKey: 'VMidD',
-        header: 'VMidD',
-      }, {
-        accessorKey: 'VButD',
-        header: 'VButD',
-      },
-
+   
     ],
     [],
   );
 
   const setOpenState = useControlSawmillModal((s) => s.setOpenModal);
+  const { map } = useMap();
+  const SOURCE_ID = 'diif';
+  const highlightedFeatureId = useControlSawmillModal((state) => state.highlightedFeatureId);
+  const setHighlightedFeatureId = useControlSawmillModal((state) => state.setHighlightedFeatureId);
 
   const handleExternalSearch = () => {
-    // This is the key: tell the table instance to update its global filter state.
-    // This change propagates to the 'globalFilter' state, which is a dependency
-    // of your useEffect, triggering a new data fetch.
-    setOpenState(false)
-    // table.setGlobalFilter("68ecf322d9248896e4b0d446");
+    if (!map) {
+      console.warn("Mapbox map instance is not yet available.");
+      return;
+    }
+    if (!similar || similar.length === 0 || !similar[0].StemKey) {
+      console.error("No similar stem data or StemKey found to highlight.");
+      return;
+    }
+
+    const featureIdToHighlight = similar[0].StemKey;
+    const coordinates = [similar[0].Longitude, similar[0].Latitude];
+
+    // 1. Clear the previous highlight (using the value from Zustand)
+    const previousHighlightedId = highlightedFeatureId;
+
+    if (previousHighlightedId !== null) {
+      map.setFeatureState(
+        { source: SOURCE_ID, id: previousHighlightedId },
+        { highlight: false } // Set back to blue
+      );
+    }
+
+    // 2. Highlight the new feature (change color to red)
+    map.setFeatureState(
+      { source: SOURCE_ID, id: featureIdToHighlight },
+      { highlight: true } // Set to red
+    );
+
+    // 3. Update Zustand store to track the new ID
+    setHighlightedFeatureId(featureIdToHighlight);
+
+    // 4. Fly to the new point
+    setOpenState(false);
+    map.flyTo({
+      center: coordinates,
+      zoom: 24,
+      speed: 6,
+      duration: 5000,
+      essential: true,
+    });
   };
 
   const table = useMaterialReactTable({
@@ -262,6 +283,7 @@ const Example = () => {
       shape: 'rounded',
       variant: 'outlined',
     },
+
     renderRowActions: ({ row }) => (
       <Box sx={{ display: 'flex', gap: '4px' }}>
         <Dialog>
@@ -279,7 +301,7 @@ const Example = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>The relevant stem to the queried logs is:</DialogTitle>
+              <DialogTitle className="my-3">The origin stem to the queried log is:</DialogTitle>
               <DialogDescription asChild>
                 {isFetchingSimilar ? (
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '30px' }}>
@@ -290,7 +312,7 @@ const Example = () => {
 
                   <Table >
                     <TableHeader>
-                      <TableRow className="bg-gray-200 ">
+                      <TableRow className="bg-gray-200 hover:bg-gray-200 ">
                         <TableHead>Stem Key</TableHead>
                         <TableHead>Min. Sim. Score</TableHead>
                         <TableHead>Best Log (L/T)</TableHead>
@@ -315,13 +337,17 @@ const Example = () => {
                       </TableRow>
 
                     </TableBody>
+
                   </Table>
                 ) : (
                   <span>Similar stem found for this log will be displayed here.</span>
                 )}
               </DialogDescription>
-              <Button variant='outlined' onClick={handleExternalSearch}>View Stem On Map</Button>
 
+              <Button variant='outlined'
+                onClick={handleExternalSearch}>
+                View Stem On Map
+              </Button>
             </DialogHeader>
           </DialogContent>
         </Dialog>
@@ -350,7 +376,44 @@ const Example = () => {
         </Button>
       </Box>
     ),
+    //conditionally render detail panel
+    renderDetailPanel: ({ row }) =>
+      row.original._id ? (
+        <Box
+          sx={{
+            display: 'grid',
+            margin: 'auto',
+            width: '80%',
+          }}
+        >
 
+
+          <Table >
+            <TableHeader>
+              <TableRow className="bg-gray-200 hover:bg-gray-200 ">
+                <TableHead>TRgRvc</TableHead>
+                <TableHead>ButtD</TableHead>
+                <TableHead>VTopD</TableHead>
+                <TableHead>ButtD</TableHead>
+                <TableHead>VMidD</TableHead>
+                <TableHead>VButD</TableHead>
+
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+
+              <TableRow key={row.original._id}>
+                <TableCell>{row.original.TRgRvc}</TableCell>
+                <TableCell>{row.original.ButtD}</TableCell>
+                <TableCell>{row.original.VTopD} </TableCell>
+                <TableCell>{row.original.VButD}</TableCell>
+              </TableRow>
+
+            </TableBody>
+
+          </Table>
+        </Box>
+      ) : null,
     enableRowSelection: true,
     getRowId: (row) => row._id,
 
