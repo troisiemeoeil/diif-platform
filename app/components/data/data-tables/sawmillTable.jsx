@@ -240,10 +240,8 @@ const Example = () => {
       { highlight: true } // Set to red
     );
 
-    // 3. Update Zustand store to track the new ID
     setHighlightedFeatureId(featureIdToHighlight);
 
-    // 4. Fly to the new point
     setOpenState(false);
     map.flyTo({
       center: coordinates,
@@ -256,7 +254,7 @@ const Example = () => {
 
   const table = useMaterialReactTable({
     columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data, 
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableGrouping: true,

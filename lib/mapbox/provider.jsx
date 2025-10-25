@@ -5,6 +5,8 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapContext } from "@/context/map-context";
 import dynamic from "next/dynamic";
+import * as THREE from 'three';
+import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 
 const Details = dynamic(() => import("@/app/components/data/harvestingdetails"), {
   ssr: false,
@@ -34,35 +36,25 @@ export default function MapProvider({
   };
   //  const [layerType, setLayerType] = useState("wms");
   const [activeLayer, setActiveLayer] = useState("layer1"); // layer1 or layer
-  const stemKey = useAppStore((state) => state.stemKey)
-  const setStemKey = useAppStore((state) => state.setStemKey)
 
 
   useEffect(() => {
     if (!mapContainerRef.current || map.current) return;
     console.log(initialViewState);
-    
+
     map.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/standard-satellite",
+      style: "mapbox://styles/mapbox/satellite-streets-v12",
       center: [initialViewState.longitude, initialViewState.latitude],
       zoom: initialViewState.zoom,
       attributionControl: false,
       logoPosition: "bottom-right",
     });
 
-
     map.current.on("load", () => {
       setLoaded(true);
       addWMSLayer(activeLayer);
     });
-
-
-
-    map.current.on("load", () => {
-    })
-
-
 
 
 
@@ -78,6 +70,7 @@ export default function MapProvider({
       });
     });
 
+
     map.current.on("style.load", () => {
       if (!map.current.getSource('diif')) {
         map.current.addSource('diif', {
@@ -87,14 +80,88 @@ export default function MapProvider({
           cluster: true,
           clusterMaxZoom: 14,
           clusterRadius: 40
-        })
+        });
+
+        // Create the custom layer outside of any event handlers
+        const customLayer = {
+          id: '3d-ply-layer',
+          type: 'custom',
+          renderingMode: '3d',
+
+          onAdd: function (map, gl) {
+            this.camera = new THREE.Camera();
+            this.scene = new THREE.Scene();
+            gl.cullFace(gl.BACK)
+
+            const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+            const directional = new THREE.DirectionalLight(0xffffff, 0.5);
+            this.scene.add(ambient);
+            this.scene.add(directional);
+
+            this.loader = new PLYLoader();
+            this.pointsLoaded = false;
+
+            this.loader.load('/300K_points.ply', (geometry) => {
+              geometry.computeBoundingBox();
+              geometry.center();
+
+              const material = new THREE.PointsMaterial({
+                size: 0.5,
+                vertexColors: !!geometry.hasAttribute('color'),
+                // color:  geometry.hasAttribute('color') ? undefined : 0x00ff88,
+                sizeAttenuation: true
+              });
+
+              this.points = new THREE.Points(geometry, material);
+              this.scene.add(this.points);
+              const lng = 22.4187199;
+              const lat = 61.7570299;
+              const alt = 20;
+
+              const merc = mapboxgl.MercatorCoordinate.fromLngLat({ lng, lat }, alt);
+              const scale = merc.meterInMercatorCoordinateUnits() * 2 ;
+
+              const matrix = new THREE.Matrix4()
+                .makeTranslation(merc.x, merc.y, merc.z)
+                .scale(new THREE.Vector3(scale, -scale, scale));
+                this.points.applyMatrix4(matrix);
+                this.pointsLoaded = true;
+                map.triggerRepaint();
+            });
+
+            map.on('styledata', () => {
+              if (this.pointsLoaded) {
+                map.triggerRepaint(); 
+              }
+            });
+
+            this.renderer = new THREE.WebGLRenderer({
+              canvas: map.getCanvas(),
+              context: gl,
+              antialias: true
+            });
+
+            this.renderer.autoClear = false;
+            this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+          },
+
+          render: function (gl, matrix) {
+            if (!this.pointsLoaded) return;
+
+            const m = new THREE.Matrix4().fromArray(matrix);
+            this.camera.projectionMatrix = m;
+            this.renderer.render(this.scene, this.camera);
+            map.current.triggerRepaint();
+            this.renderer.resetState()
+          }
+        };
 
 
         map.current.addLayer({
           id: 'clusters',
           type: 'circle',
           source: 'diif',
-          
+
           filter: ['has', 'point_count'],
           paint: {
             'circle-color': [
@@ -119,6 +186,7 @@ export default function MapProvider({
           }
         });
 
+
         map.current.addLayer({
           id: 'cluster-count',
           type: 'symbol',
@@ -139,9 +207,9 @@ export default function MapProvider({
           paint: {
             'circle-color': [
               'case',
-              ['boolean', ['feature-state', 'highlight'], false], 
-              '#ff0000', 
-              '#34a8cf' 
+              ['boolean', ['feature-state', 'highlight'], false],
+              '#ff0000',
+              '#34a8cf'
             ],
             'circle-radius': 4,
             'circle-stroke-width': 1,
@@ -149,6 +217,10 @@ export default function MapProvider({
             'circle-emissive-strength': 1
           }
         });
+
+
+        map.current.addLayer(customLayer, 'clusters', "cluster-count", "unclustered-point", "wms-layer");
+
 
       }
     });
@@ -301,6 +373,8 @@ export default function MapProvider({
   };
 
 
+
+
   return (
     <div className="z-[1000]">
       <MapContext.Provider value={{ map: map.current }}>
@@ -361,4 +435,6 @@ function StemPopup({ stemKey, stemInfo, onOpen }) {
     </div>
   );
 }
+
+
 
