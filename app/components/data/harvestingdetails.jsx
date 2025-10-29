@@ -72,8 +72,7 @@ export default function Details() {
   if (!stemDetails) return null;
 
   const stemInfoRaw = stemDetails;
-  // Destructuring data to eliminate specific key/values
-  // const { Logs, _id, Latitude, Longitude, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
+
   const { Logs, _id, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
 
 
@@ -142,8 +141,31 @@ export function StemLogsTable({ stemDetails }) {
   // Safely access the Logs array. No need for JSON.parse as it's an object now.
   let logs = stemDetails?.Logs || [];
 
-  function handleTrack() {
-    alert("Sawmill data inserted");
+  async function handleTrack(log) {
+    console.log(log);
+
+ 
+    const inputValues = {
+  LogLength: log.LogMeasurement?.LogLength,  
+  TopOb: log.LogMeasurement?.TopOb,        
+};
+
+    try {
+      const response = await fetch('/api/find-similar-back-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inputValues)
+      });
+
+      const similarDocs = await response.json();
+      console.log(similarDocs);
+      setSimilar(similarDocs);
+      setIsFetchingSimilar(false);
+
+    } catch (error) {
+      console.error("Error finding similar documents:", error);
+      setIsFetchingSimilar(false);
+    }
   }
 
   if (logs.length === 0) {
@@ -165,22 +187,25 @@ export function StemLogsTable({ stemDetails }) {
               Log Number: {log.LogKey} (Product: {log.ProductKey})
 
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent >
               <Table>
                 <TableBody className="max-h-60 overflow-y-auto block">
                   {transformedLogData.map((item) => (
-                    <TableRow key={item.key}>
-                      <TableCell className="w-[100%] font-medium text-gray-600">
-                        {item.key}
-                      </TableCell>
-                      <TableCell className="w-[100%] text-right font-mono">
-                        {item.value}
-                      </TableCell>
-                    </TableRow>
+                    <div>
+                      <TableRow key={item.key}>
+                        <TableCell className="w-[100%] font-medium text-gray-600">
+                          {item.key}
+                        </TableCell>
+                        <TableCell className="w-[100%] text-right font-mono">
+                          {item.value}
+                        </TableCell>
+                      </TableRow>
+                    </div>
+
                   ))}
                 </TableBody>
               </Table>
-              <Button className="w-full my-5 hover:bg-red-700 cursor-pointer" onClick={handleTrack}>Track</Button>
+              <Button  className="w-full my-5 hover:bg-red-700 cursor-pointer"   onClick={() => handleTrack(log)}>Track</Button>
             </AccordionContent>
 
           </AccordionItem>

@@ -64,7 +64,7 @@ const Example = () => {
     };
 
     try {
-      const response = await fetch('/api/find-similar', {
+      const response = await fetch('/api/find-similar-tracking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(inputValues)
@@ -312,7 +312,7 @@ const Example = () => {
                     <TableHeader>
                       <TableRow className="bg-gray-200 hover:bg-gray-200 ">
                         <TableHead>Stem Key</TableHead>
-                        <TableHead>Min. Sim. Score</TableHead>
+                        {/* <TableHead>Min. Sim. Score</TableHead> */}
                         <TableHead>Best Log (L/T)</TableHead>
                         <TableHead>Coordinates</TableHead>
                       </TableRow>
@@ -321,7 +321,7 @@ const Example = () => {
 
                       <TableRow key={similar[0].StemKey}>
                         <TableCell>{similar[0].StemKey}</TableCell>
-                        <TableCell>{similar[0].minSimilarityScore.toFixed(2)}</TableCell>
+                        {/* <TableCell>{similar[0].minSimilarityScore.toFixed(2)}</TableCell> */}
                         <TableCell>
                           Length: {similar[0].BestMatchingLog?.LogMeasurement?.LogLength || 'N/A'} (cm)
                           <br />
