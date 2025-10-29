@@ -73,7 +73,9 @@ export default function Details() {
 
   const stemInfoRaw = stemDetails;
   // Destructuring data to eliminate specific key/values
-  const { Logs, _id, Latitude, Longitude, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
+  // const { Logs, _id, Latitude, Longitude, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
+  const { Logs, _id, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
+
 
   const transformedData = Object.entries(filteredStemInfo).map(([key, value]) => ({
     key,

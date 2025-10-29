@@ -26,7 +26,7 @@ export default function MapProvider({
   const map = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
-  const [activeLayerIds, setActiveLayerIds] = useState(['3d-ply-layer', ]);
+  const [activeLayerIds, setActiveLayerIds] = useState(['3d-ply-layer',]);
 
   const wmsLayers = {
     layer1:
@@ -78,7 +78,7 @@ export default function MapProvider({
           clusterRadius: 40
         });
 
-   Object.entries(wmsLayers).forEach(([key, url]) => {
+        Object.entries(wmsLayers).forEach(([key, url]) => {
           if (!map.current.getSource(key)) {
             map.current.addSource(key, {
               type: "raster",
@@ -121,7 +121,7 @@ export default function MapProvider({
               geometry.center();
 
               const material = new THREE.PointsMaterial({
-                size: 1,
+                size: 1.2,
                 vertexColors: !!geometry.hasAttribute('color'),
                 color: geometry.hasAttribute('color') ? undefined : 0x00ff88,
                 sizeAttenuation: true
@@ -130,15 +130,18 @@ export default function MapProvider({
               this.points = new THREE.Points(geometry, material);
               this.scene.add(this.points);
 
-              const lng = 22.4187199;
-              const lat = 61.7570299;
+              const lng = 22.4190383;
+              const lat = 61.7569133;
               const alt = 20;
 
               const merc = mapboxgl.MercatorCoordinate.fromLngLat({ lng, lat }, alt);
               const scale = merc.meterInMercatorCoordinateUnits() * 2.25;
-
+              const offsetX = 0;  
+              const offsetY = 0; 
+              const offsetZ = 0;    
               const matrix = new THREE.Matrix4()
-                .makeTranslation(merc.x, merc.y, merc.z)
+                .makeTranslation(merc.x + offsetX, merc.y + offsetY, merc.z + offsetZ)
+                .multiply(new THREE.Matrix4().makeRotationZ(THREE.MathUtils.degToRad(18)))
                 .scale(new THREE.Vector3(scale, -scale, scale));
               this.points.applyMatrix4(matrix);
               this.pointsLoaded = true;
@@ -239,7 +242,7 @@ export default function MapProvider({
           }
         });
 
-     
+
       }
     });
 
@@ -395,17 +398,13 @@ export default function MapProvider({
         <div style={{ position: "absolute", top: 10, left: 10, zIndex: 10, display: "flex", gap: 8 }}>
           <Button
             id="layer1"
-            // onClick={() => handleLayerSwitch("layer1")}
             onClick={handleClick}
-
-            className={`px-3 py-1 rounded ${activeLayer === "layer1" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
           >
             FSV
           </Button>
           <Button
             id="layer2"
-            // onClick={() => handleLayerSwitch("layer2")}
-            className={`px-3 py-1 rounded ${activeLayer === "layer2" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
+
             onClick={handleClick}
 
           >
