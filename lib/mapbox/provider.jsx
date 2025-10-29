@@ -25,9 +25,9 @@ export default function MapProvider({
 }) {
   const map = useRef(null);
   const [loaded, setLoaded] = useState(false);
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [selectedStemKey, setSelectedStemKey] = useState(null);
-  const [selectedStemInfo, setSelectedStemInfo] = useState(null);
+
+  const [activeLayerIds, setActiveLayerIds] = useState(['3d-ply-layer', ]);
+
   const wmsLayers = {
     layer1:
       "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
@@ -51,16 +51,12 @@ export default function MapProvider({
       logoPosition: "bottom-right",
     });
 
-    map.current.on("load", () => {
-      setLoaded(true);
-      addWMSLayer(activeLayer);
-    });
+
 
 
 
     map.current.on("load", () => {
       setLoaded(true);
-
       map.current.flyTo({
         center: [22.4187199, 61.7570299],
         zoom: 15,
@@ -82,12 +78,31 @@ export default function MapProvider({
           clusterRadius: 40
         });
 
-        // Create the custom layer outside of any event handlers
+   Object.entries(wmsLayers).forEach(([key, url]) => {
+          if (!map.current.getSource(key)) {
+            map.current.addSource(key, {
+              type: "raster",
+              tiles: [url],
+              tileSize: 256,
+            });
+
+            map.current.addLayer({
+              id: key,
+              type: "raster",
+              source: key,
+              layout: { visibility: activeLayerIds.includes(key) ? "visible" : "none" },
+            });
+          }
+        });
+
+
         const customLayer = {
           id: '3d-ply-layer',
           type: 'custom',
           renderingMode: '3d',
-
+          layout: {
+            visibility: 'visible'
+          },
           onAdd: function (map, gl) {
             this.camera = new THREE.Camera();
             this.scene = new THREE.Scene();
@@ -106,32 +121,33 @@ export default function MapProvider({
               geometry.center();
 
               const material = new THREE.PointsMaterial({
-                size: 0.5,
+                size: 1,
                 vertexColors: !!geometry.hasAttribute('color'),
-                // color:  geometry.hasAttribute('color') ? undefined : 0x00ff88,
+                color: geometry.hasAttribute('color') ? undefined : 0x00ff88,
                 sizeAttenuation: true
               });
 
               this.points = new THREE.Points(geometry, material);
               this.scene.add(this.points);
+
               const lng = 22.4187199;
               const lat = 61.7570299;
               const alt = 20;
 
               const merc = mapboxgl.MercatorCoordinate.fromLngLat({ lng, lat }, alt);
-              const scale = merc.meterInMercatorCoordinateUnits() * 2 ;
+              const scale = merc.meterInMercatorCoordinateUnits() * 2.25;
 
               const matrix = new THREE.Matrix4()
                 .makeTranslation(merc.x, merc.y, merc.z)
                 .scale(new THREE.Vector3(scale, -scale, scale));
-                this.points.applyMatrix4(matrix);
-                this.pointsLoaded = true;
-                map.triggerRepaint();
+              this.points.applyMatrix4(matrix);
+              this.pointsLoaded = true;
+              map.triggerRepaint();
             });
 
             map.on('styledata', () => {
               if (this.pointsLoaded) {
-                map.triggerRepaint(); 
+                map.triggerRepaint();
               }
             });
 
@@ -156,6 +172,29 @@ export default function MapProvider({
           }
         };
 
+        //add point clouds layer
+        map.current.addLayer(customLayer);
+
+        //add clustered points 1K layer
+        map.current.addLayer({
+          id: 'unclustered-point',
+          type: 'circle',
+          source: 'diif',
+          filter: ['!', ['has', 'point_count']],
+          paint: {
+            'circle-color': [
+              'case',
+              ['boolean', ['feature-state', 'highlight'], false],
+              '#ff0000',
+              '#34a8cf'
+            ],
+            'circle-radius': 4,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#fff',
+            'circle-emissive-strength': 1
+          }
+        });
+        //add clustered points layer 2
 
         map.current.addLayer({
           id: 'clusters',
@@ -186,6 +225,7 @@ export default function MapProvider({
           }
         });
 
+        //add unclustered points layer
 
         map.current.addLayer({
           id: 'cluster-count',
@@ -199,35 +239,18 @@ export default function MapProvider({
           }
         });
 
-        map.current.addLayer({
-          id: 'unclustered-point',
-          type: 'circle',
-          source: 'diif',
-          filter: ['!', ['has', 'point_count']],
-          paint: {
-            'circle-color': [
-              'case',
-              ['boolean', ['feature-state', 'highlight'], false],
-              '#ff0000',
-              '#34a8cf'
-            ],
-            'circle-radius': 4,
-            'circle-stroke-width': 1,
-            'circle-stroke-color': '#fff',
-            'circle-emissive-strength': 1
-          }
-        });
-
-
-        map.current.addLayer(customLayer, 'clusters', "cluster-count", "unclustered-point", "wms-layer");
-
-
+     
       }
     });
+
+
+
+
 
     if (map.current.hasInteraction && map.current.hasInteraction('click-clusters')) {
       map.current.removeInteraction('click-clusters');
     }
+
     map.current.addInteraction('click-clusters', {
       type: 'click',
       target: { layerId: 'clusters' },
@@ -289,7 +312,8 @@ export default function MapProvider({
     if (map.current.hasInteraction && map.current.hasInteraction('clustered-mouseenter')) {
       map.current.removeInteraction('clustered-mouseenter');
     }
-    // Change the cursor to a pointer when the mouse is over a cluster of POIs.
+
+
     map.current.addInteraction('clustered-mouseenter', {
       type: 'mouseenter',
       target: { layerId: 'clusters' },
@@ -342,54 +366,57 @@ export default function MapProvider({
     };
   }, [initialViewState, mapContainerRef]);
 
-  const addWMSLayer = (layerKey) => {
-    if (!map.current) return;
+  useEffect(() => {
+    if (!map.current || !loaded) return;
 
-    // Remove existing WMS layer & source
-    if (map.current.getLayer("wms-layer")) map.current.removeLayer("wms-layer");
-    if (map.current.getSource("wms-source")) map.current.removeSource("wms-source");
+    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2'];
 
-    // Add new raster source
-    map.current.addSource("wms-source", {
-      type: "raster",
-      tiles: [wmsLayers[layerKey]],
-      tileSize: 256,
+    allLayerIds.forEach((layerId) => {
+      if (!map.current.getLayer(layerId)) return;
+      const visibility = activeLayerIds.includes(layerId) ? 'visible' : 'none';
+      map.current.setLayoutProperty(layerId, 'visibility', visibility);
     });
+  }, [activeLayerIds, loaded]);
 
-    map.current.addLayer(
-      {
-        id: "wms-layer",
-        type: "raster",
-        source: "wms-source",
-      },
-      "clusters"
+
+
+  const handleClick = (e) => {
+    const layerId = e.target.id;
+    setActiveLayerIds((prev) =>
+      prev.includes(layerId)
+        ? prev.filter((id) => id !== layerId)
+        : [...prev, layerId]
     );
   };
-
-
-  const handleLayerSwitch = (layerKey) => {
-    setActiveLayer(layerKey);
-    addWMSLayer(layerKey);
-  };
-
-
-
 
   return (
     <div className="z-[1000]">
       <MapContext.Provider value={{ map: map.current }}>
         <div style={{ position: "absolute", top: 10, left: 10, zIndex: 10, display: "flex", gap: 8 }}>
           <Button
-            onClick={() => handleLayerSwitch("layer1")}
+            id="layer1"
+            // onClick={() => handleLayerSwitch("layer1")}
+            onClick={handleClick}
+
             className={`px-3 py-1 rounded ${activeLayer === "layer1" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
           >
             FSV
           </Button>
           <Button
-            onClick={() => handleLayerSwitch("layer2")}
+            id="layer2"
+            // onClick={() => handleLayerSwitch("layer2")}
             className={`px-3 py-1 rounded ${activeLayer === "layer2" ? "bg-blue-300 text-white" : "bg-gray-500"}`}
+            onClick={handleClick}
+
           >
             FUDV
+          </Button>
+          <Button
+            id="3d-ply-layer"
+            className=""
+            onClick={handleClick}
+          >
+            Point Clouds
           </Button>
 
         </div>
@@ -429,9 +456,6 @@ function StemPopup({ stemKey, stemInfo, onOpen }) {
           onClick={() => onOpen(stemKey, stemInfo)}
         />
       </div>
-
-
-
     </div>
   );
 }
