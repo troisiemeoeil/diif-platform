@@ -52,7 +52,6 @@ export default function Details() {
   const setSheetOpen = useAppStore((s) => s.setSheetOpen);
   const stemKey = useAppStore((s) => s.stemKey);
   const [stemDetails, setStemDetails] = useState(null);
-
   useEffect(() => {
     if (!sheetOpen) return;
 
@@ -138,6 +137,10 @@ export default function Details() {
 // =======================================
 
 export function StemLogsTable({ stemDetails }) {
+
+  
+  const [similar, setSimilar] = useState(null)
+  const [isFetchingSimilar, setIsFetchingSimilar] = useState(true)
   // Safely access the Logs array. No need for JSON.parse as it's an object now.
   let logs = stemDetails?.Logs || [];
 
@@ -159,6 +162,7 @@ export function StemLogsTable({ stemDetails }) {
 
       const similarDocs = await response.json();
       console.log(similarDocs);
+      alert(JSON.stringify(similarDocs[0]))
       setSimilar(similarDocs);
       setIsFetchingSimilar(false);
 
