@@ -1,39 +1,34 @@
 import clientPromise from "@/lib/db/mongodb";
 
 const findMatchingSawmillLogs = async (harvestLog) => {
-  const { LogLength, TopOb } = harvestLog; 
+  const { LogLength, TopOb } = harvestLog;
   const pipeline = [
     {
       $addFields: {
         similarityScore: {
           $add: [
-            // --- LENGTH (cm → mm) ---
+            // --- LENGTH (Input cm -> mm) ---
             {
-              $pow: [
-                {
-                  $subtract: [
-                    { $toDouble: "$Length" },              // Sawmill (mm)
-                    { $multiply: [{ $toDouble: LogLength }, 10] } // cm → mm
-                  ]
-                },
-                2
-              ]
+              $pow: [{
+                $subtract: [
+                  // DB Length is already in mm
+                  { $toDouble: "$Length" },
+                  // Convert Input LogLength from cm to mm
+                  { $multiply: [{ $toDouble: LogLength }, 10] }
+                ]
+              }, 2]
             },
-
-            // --- TOP DIAMETER (mm → 0.1 mm) ---
+            // --- TOP DIAMETER (DB 0.1 mm -> mm) ---
             {
-              $pow: [
-                {
-                  $subtract: [
-                    { $toDouble: "$TRgRvc" },              // Sawmill (0.1 mm)
-                    { $multiply: [{ $toDouble: TopOb }, 10] } // mm → 0.1 mm
-                  ]
-                },
-                2
-              ]
+              $pow: [{
+                $subtract: [
+                  // Convert DB TRgRvc from 0.1 mm to mm
+                  { $divide: [{ $toDouble: "$TRgRvc" }, 10] },
+                  // Input TopOb is already in mm
+                  { $toDouble: TopOb }
+                ]
+              }, 2]
             },
-
-        
           ]
         }
       }

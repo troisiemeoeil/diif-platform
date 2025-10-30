@@ -15,20 +15,24 @@ const findSimilar = async (input) => {
             $addFields: {
                 similarityScore: {
                     $add: [
-                        // Length difference (input mm -> DB cm)
+                        // --- LENGTH (DB cm -> mm) ---
                         {
                             $pow: [{
                                 $subtract: [
-                                    { $toDouble: "$Logs.LogMeasurement.LogLength" },
-                                    { $divide: [{ $toDouble: inputLength }, 10] }
+                                    // Convert DB LogLength from cm to mm
+                                    { $multiply: [{ $toDouble: "$Logs.LogMeasurement.LogLength" }, 10] },
+                                    // Input is already in mm
+                                    { $toDouble: inputLength }
                                 ]
                             }, 2]
                         },
-                        // Top diameter difference (input 0.1 mm -> DB mm)
+                        // --- TOP DIAMETER (Input 0.1 mm -> mm) ---
                         {
                             $pow: [{
                                 $subtract: [
+                                    // DB TopOb is already in mm
                                     { $toDouble: "$Logs.LogMeasurement.TopOb" },
+                                    // Convert Input VTopD from 0.1 mm to mm
                                     { $divide: [{ $toDouble: inputVTopD }, 10] }
                                 ]
                             }, 2]
