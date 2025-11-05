@@ -240,8 +240,8 @@ const Example = () => {
 
     const featureIdToHighlight = similar[0].StemKey;
     const coordinates = [similar[0].Longitude, similar[0].Latitude];
-
-    // 1. Clear the previous highlight (using the value from Zustand)
+    console.log("similar best log", similar[0]);
+    
     const previousHighlightedId = highlightedFeatureId;
 
     if (previousHighlightedId !== null) {
@@ -331,8 +331,10 @@ const Example = () => {
                     <TableHeader>
                       <TableRow className="bg-gray-200 hover:bg-gray-200 ">
                         <TableHead>Stem Key</TableHead>
+                        <TableHead>Log Number</TableHead>
+
                         {/* <TableHead>Min. Sim. Score</TableHead> */}
-                        <TableHead>Best Log (L/T)</TableHead>
+                        <TableHead>Log Length</TableHead>
                         <TableHead>Coordinates</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -340,11 +342,11 @@ const Example = () => {
 
                       <TableRow key={similar[0].StemKey}>
                         <TableCell>{similar[0].StemKey}</TableCell>
+                        <TableCell>{similar[0].MatchingLog?.LogKey}</TableCell>
+
                         {/* <TableCell>{similar[0].minSimilarityScore.toFixed(2)}</TableCell> */}
                         <TableCell>
-                          Length: {similar[0].BestMatchingLog?.LogMeasurement?.LogLength || 'N/A'} (cm)
-                          <br />
-                          TopOb: {similar[0].BestMatchingLog?.LogMeasurement?.TopOb || 'N/A'} (mm)
+                          Length: {similar[0].MatchingLog?.LogMeasurement?.LogLength || 'N/A'} (cm)
                         </TableCell>
                         <TableCell>
                           Lat: {similar[0].Latitude}
