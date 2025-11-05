@@ -444,7 +444,7 @@ export default function MapProvider({
                 className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
                 alt="Point Clouds button image"
               />
-              <span className="text-white font-bold text-xl absolute bottom-0 left-2">POINT CLOUD</span>
+              <span className="text-white font-bold text-md absolute bottom-0 left-2">POINT CLOUD</span>
 
             </button>
 
