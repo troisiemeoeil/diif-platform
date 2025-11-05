@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useAppStore } from "@/lib/state/store";
+import { useAppStore, useControlSawmillModal } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
@@ -138,20 +138,23 @@ export default function Details() {
 
 export function StemLogsTable({ stemDetails }) {
 
-  
+
   const [similar, setSimilar] = useState(null)
   const [isFetchingSimilar, setIsFetchingSimilar] = useState(true)
+  const setLogNumber = useAppStore((s) => s.setLogNumber)
+  const setOpenModal = useControlSawmillModal((s) => s.setOpenModal)
+
   // Safely access the Logs array. No need for JSON.parse as it's an object now.
   let logs = stemDetails?.Logs || [];
 
   async function handleTrack(log) {
     console.log(log);
 
- 
+
     const inputValues = {
-  LogLength: log.LogMeasurement?.LogLength,  
-  TopOb: log.LogMeasurement?.TopOb,        
-};
+      LogLength: log.LogMeasurement?.LogLength,
+      TopOb: log.LogMeasurement?.TopOb,
+    };
 
     try {
       const response = await fetch('/api/find-similar-back-tracking', {
@@ -165,7 +168,8 @@ export function StemLogsTable({ stemDetails }) {
       alert(JSON.stringify(similarDocs[0]))
       setSimilar(similarDocs);
       setIsFetchingSimilar(false);
-
+      setLogNumber(similarDocs[0].LogNr)
+      setOpenModal(true)
     } catch (error) {
       console.error("Error finding similar documents:", error);
       setIsFetchingSimilar(false);
@@ -192,10 +196,11 @@ export function StemLogsTable({ stemDetails }) {
 
             </AccordionTrigger>
             <AccordionContent >
-              <Table>
-                <TableBody className="max-h-60 overflow-y-auto block">
-                  {transformedLogData.map((item) => (
-                    <div>
+              <div >
+                <Table>
+                  <TableBody className="max-h-60 overflow-y-auto block">
+                    {transformedLogData.map((item) => (
+
                       <TableRow key={item.key}>
                         <TableCell className="w-[100%] font-medium text-gray-600">
                           {item.key}
@@ -204,12 +209,14 @@ export function StemLogsTable({ stemDetails }) {
                           {item.value}
                         </TableCell>
                       </TableRow>
-                    </div>
 
-                  ))}
-                </TableBody>
-              </Table>
-              <Button  className="w-full my-5 hover:bg-red-700 cursor-pointer"   onClick={() => handleTrack(log)}>Track</Button>
+
+                    ))}
+                  </TableBody>
+                </Table>
+                <Button className="w-full my-5 hover:bg-red-700 cursor-pointer" onClick={() => handleTrack(log)}>Track</Button>
+
+              </div>
             </AccordionContent>
 
           </AccordionItem>
