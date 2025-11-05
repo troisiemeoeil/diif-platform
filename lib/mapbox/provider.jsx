@@ -15,6 +15,7 @@ const Details = dynamic(() => import("@/app/components/data/harvestingdetails"),
 import { useAppStore } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Icon } from "lucide-react";
+import Image from "next/image";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -136,9 +137,9 @@ export default function MapProvider({
 
               const merc = mapboxgl.MercatorCoordinate.fromLngLat({ lng, lat }, alt);
               const scale = merc.meterInMercatorCoordinateUnits() * 2.25;
-              const offsetX = 0;  
-              const offsetY = 0; 
-              const offsetZ = 0;    
+              const offsetX = 0;
+              const offsetY = 0;
+              const offsetZ = 0;
               const matrix = new THREE.Matrix4()
                 .makeTranslation(merc.x + offsetX, merc.y + offsetY, merc.z + offsetZ)
                 .multiply(new THREE.Matrix4().makeRotationZ(THREE.MathUtils.degToRad(18)))
@@ -384,7 +385,9 @@ export default function MapProvider({
 
 
   const handleClick = (e) => {
-    const layerId = e.target.id;
+    const layerId = e.currentTarget.id;
+    if (!layerId) return;
+
     setActiveLayerIds((prev) =>
       prev.includes(layerId)
         ? prev.filter((id) => id !== layerId)
@@ -393,32 +396,61 @@ export default function MapProvider({
   };
 
   return (
-    <div className="z-[1000]">
+    <div className="">
       <MapContext.Provider value={{ map: map.current }}>
-        <div style={{ position: "absolute", top: 10, left: 10, zIndex: 10, display: "flex", gap: 8 }}>
-          <Button
-            id="layer1"
-            onClick={handleClick}
-          >
-            FSV
-          </Button>
-          <Button
-            id="layer2"
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[999]">
+          <div className="absolute top-2 left-2 flex flex-col gap-4 pointer-events-auto">
 
-            onClick={handleClick}
+            <button
+              id="layer1"
+              onClick={handleClick}
+              className="p-0 relative border-none bg-transparent cursor-pointer"
+            >
+              <img
+                src="/fsv.png"
+                width={500}
+                height={100}
+                className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
+                alt="FSV button image"
+              />
+              <span className="text-white font-bold text-md absolute bottom-0 left-2">FOREST RESERVE PATTERNS </span>
 
-          >
-            FUDV
-          </Button>
-          <Button
-            id="3d-ply-layer"
-            className=""
-            onClick={handleClick}
-          >
-            Point Clouds
-          </Button>
+            </button>
+            <button
+              id="layer2"
+              onClick={handleClick}
+              className="p-0 relative border-none bg-transparent cursor-pointer"
+            >
+              <img
+                src="/fudv.png"
+                width={500}
+                height={100}
+                className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
+                alt="FUDV button image"
+              />
+              <span className="text-white font-bold text-md absolute bottom-0 left-2">FOREST USE NOTIFICATIONS</span>
+            </button>
 
+
+            <button
+              id="3d-ply-layer"
+              onClick={handleClick}
+              className="p-0 relative border-none bg-transparent cursor-pointer"
+            >
+              <img
+                src="/pointcloud.jpg"
+                width={500}
+                height={100}
+                className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
+                alt="Point Clouds button image"
+              />
+              <span className="text-white font-bold text-xl absolute bottom-0 left-2">POINT CLOUD</span>
+
+            </button>
+
+          </div>
         </div>
+
         {children}
       </MapContext.Provider>
       {!loaded ? (

@@ -202,3 +202,7 @@
 .dark .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
   border-left-color: var(--card);
 }
+
+.mapboxgl-canvas {
+  pointer-events: none;
+}
