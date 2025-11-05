@@ -142,6 +142,9 @@ export function StemLogsTable({ stemDetails }) {
   const [similar, setSimilar] = useState(null)
   const [isFetchingSimilar, setIsFetchingSimilar] = useState(true)
   const setLogNumber = useAppStore((s) => s.setLogNumber)
+  const logNumber = useAppStore((s) => s.logNumber)
+
+  const setTriggerBackTracking = useAppStore((s) => s.setTriggerBackTracking)
   const setOpenModal = useControlSawmillModal((s) => s.setOpenModal)
 
   // Safely access the Logs array. No need for JSON.parse as it's an object now.
@@ -164,12 +167,12 @@ export function StemLogsTable({ stemDetails }) {
       });
 
       const similarDocs = await response.json();
-      console.log(similarDocs);
-      alert(JSON.stringify(similarDocs[0]))
       setSimilar(similarDocs);
       setIsFetchingSimilar(false);
       setLogNumber(similarDocs[0].LogNr)
+      setTriggerBackTracking(true)
       setOpenModal(true)
+      
     } catch (error) {
       console.error("Error finding similar documents:", error);
       setIsFetchingSimilar(false);

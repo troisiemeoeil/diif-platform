@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useControlSawmillModal } from '@/lib/state/store';
+import { useAppStore, useControlSawmillModal } from '@/lib/state/store';
 import {
   Table,
   TableBody,
@@ -36,6 +36,12 @@ const Example = () => {
   const [rowCount, setRowCount] = useState(0);
   const [similar, setSimilar] = useState(null)
   const [isFetchingSimilar, setIsFetchingSimilar] = useState(true)
+  const triggerBackTracking = useAppStore((s) => s.triggerBackTracking)
+  const open = useControlSawmillModal((s) => s.open)
+
+  const setTriggerBackTracking = useAppStore((s) => s.setTriggerBackTracking)
+
+  const logNumber = useAppStore((s) => s.logNumber)
 
 
   //table state
@@ -50,6 +56,18 @@ const Example = () => {
   });
   const [rowSelection, setRowSelection] = useState({});
 
+
+  useEffect(() => {
+    if (triggerBackTracking) {
+      console.log(logNumber);
+      setGlobalFilter(logNumber)
+      setTriggerBackTracking(false)
+    }
+    if (!open) {
+
+      setGlobalFilter('')
+    }
+  }, [triggerBackTracking])
 
   const handleViewDetails = async (row) => {
     // 🎯 Reverting alert() to console.log/custom UI due to environment restrictions
@@ -71,7 +89,6 @@ const Example = () => {
       });
 
       const similarDocs = await response.json();
-      console.log(similarDocs);
       setSimilar(similarDocs);
       setIsFetchingSimilar(false);
 
@@ -200,7 +217,7 @@ const Example = () => {
         accessorKey: 'Volume',
         header: 'Volume',
       },
-   
+
     ],
     [],
   );
@@ -252,9 +269,11 @@ const Example = () => {
     });
   };
 
+
+
   const table = useMaterialReactTable({
     columns,
-    data, 
+    data,
     enableColumnFilterModes: true,
     enableColumnOrdering: true,
     enableGrouping: true,
@@ -297,7 +316,7 @@ const Example = () => {
               </a>
             </div>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="z-100">
             <DialogHeader>
               <DialogTitle className="my-3">The origin stem to the queried log is:</DialogTitle>
               <DialogDescription asChild>
@@ -403,7 +422,7 @@ const Example = () => {
                 <TableCell>{row.original.TRgRvc}</TableCell>
                 <TableCell>{row.original.ButtD}</TableCell>
                 <TableCell>{row.original.VTopD} </TableCell>
-                  <TableCell>{row.original.VMidD} </TableCell>
+                <TableCell>{row.original.VMidD} </TableCell>
                 <TableCell>{row.original.VButD}</TableCell>
               </TableRow>
 
