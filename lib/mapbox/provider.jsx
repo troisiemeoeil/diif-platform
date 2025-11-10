@@ -16,7 +16,7 @@ import { useAppStore } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Icon } from "lucide-react";
 import Image from "next/image";
-
+import ExpandableActions  from "@/app/components/layers-menu"
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 export default function MapProvider({
@@ -398,19 +398,21 @@ export default function MapProvider({
   return (
     <div className="">
       <MapContext.Provider value={{ map: map.current }}>
+
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[999]">
           <div className="absolute top-2 left-2 flex flex-col gap-4 pointer-events-auto">
+          <ExpandableActions>
 
             <button
               id="layer1"
               onClick={handleClick}
-              className="p-0 relative border-none bg-transparent cursor-pointer"
+              className="p-0 relative  w-full border-none bg-transparent cursor-pointer"
             >
               <img
                 src="/fsv.png"
                 width={500}
                 height={100}
-                className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
+                className="object-cover w-full h-33 rounded-md bg-blend-overlay"
                 alt="FSV button image"
               />
               <span className="text-white font-bold text-md absolute bottom-0 left-2">FOREST RESERVE PATTERNS </span>
@@ -419,34 +421,34 @@ export default function MapProvider({
             <button
               id="layer2"
               onClick={handleClick}
-              className="p-0 relative border-none bg-transparent cursor-pointer"
+              className="p-0 relative  w-full border-none bg-transparent cursor-pointer"
             >
               <img
                 src="/fudv.png"
                 width={500}
                 height={100}
-                className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
+                className="object-cover w-full h-33 rounded-md bg-blend-overlay"
                 alt="FUDV button image"
               />
               <span className="text-white font-bold text-md absolute bottom-0 left-2">FOREST USE NOTIFICATIONS</span>
             </button>
-
-
             <button
               id="3d-ply-layer"
               onClick={handleClick}
-              className="p-0 relative border-none bg-transparent cursor-pointer"
+              className="p-0 relative w-full border-none bg-transparent cursor-pointer"
             >
               <img
                 src="/pointcloud.jpg"
                 width={500}
                 height={100}
-                className="object-cover w-60 h-20 rounded-md bg-blend-overlay"
+                className="object-cover w-full h-33 rounded-md bg-blend-overlay"
                 alt="Point Clouds button image"
               />
               <span className="text-white font-bold text-md absolute bottom-0 left-2">POINT CLOUD</span>
 
             </button>
+
+            </ExpandableActions>
 
           </div>
         </div>

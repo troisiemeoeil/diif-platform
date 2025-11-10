@@ -203,6 +203,4 @@
   border-left-color: var(--card);
 }
 
-.mapboxgl-canvas {
-  pointer-events: none;
-}
+

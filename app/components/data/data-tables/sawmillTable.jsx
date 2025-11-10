@@ -78,7 +78,8 @@ const Example = () => {
       length: row.original.Length,
       volume: row.original.Volume,
       vtop: row.original.VTopD,
-      buttD: row.original.ButtD
+      buttD: row.original.ButtD,
+      
     };
 
     try {
@@ -233,11 +234,12 @@ const Example = () => {
       console.warn("Mapbox map instance is not yet available.");
       return;
     }
+    console.log(similar);
     if (!similar || similar.length === 0 || !similar[0].StemKey) {
       console.error("No similar stem data or StemKey found to highlight.");
       return;
     }
-
+    
     const featureIdToHighlight = similar[0].StemKey;
     const coordinates = [similar[0].Longitude, similar[0].Latitude];
     console.log("similar best log", similar[0]);
