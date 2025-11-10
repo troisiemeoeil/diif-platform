@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 // import { getAllPeople, getAvatarUrl } from "@smoothui/data";
-import { Play } from "lucide-react";
+import {  Layers } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -119,7 +119,7 @@ export default function ExpandableCards({
                         <div className="relative h-full w-[80px]">
 
                             <div className="absolute inset-0 " />
-                            <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
+                            <div className="absolute inset-0 flex flex-col justify-between  text-white">
 
                                 <div className="flex items-center gap-2">
                                     <button
@@ -128,7 +128,8 @@ export default function ExpandableCards({
                                         type="button"
                                         onClick={() => handleCardClick(card.id)}
                                     >
-                                        <Play className="h-6 w-6 text-white cursor-pointer" />
+                                        <Layers className="h-6 w-6 text-white cursor-pointer" />
+                                       
                                     </button>
                                 </div>
                             </div>
@@ -148,7 +149,7 @@ export default function ExpandableCards({
                                 >
                                     <motion.div
                                         animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                                        className="flex h-full flex-col items-end  justify-between p-8 gap-1"
+                                        className="flex h-full flex-col items-end  justify-between p-4"
                                         exit={{ opacity: 0, x: 20, filter: "blur(5px)" }}
                                         initial={{ opacity: 0, x: 20, filter: "blur(5px)" }}
                                         transition={{ delay: 0.4, duration: 0.3 }}

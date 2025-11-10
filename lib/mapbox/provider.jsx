@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapContext } from "@/context/map-context";
+import { AnimatePresence, motion } from "motion/react";
+
 import dynamic from "next/dynamic";
 import * as THREE from 'three';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
@@ -16,7 +18,7 @@ import { useAppStore } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Icon } from "lucide-react";
 import Image from "next/image";
-import ExpandableActions  from "@/app/components/layers-menu"
+import ExpandableActions from "@/app/components/layers-menu"
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 export default function MapProvider({
@@ -401,52 +403,129 @@ export default function MapProvider({
 
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[999]">
           <div className="absolute top-2 left-2 flex flex-col gap-4 pointer-events-auto">
-          <ExpandableActions>
+            <ExpandableActions>
 
-            <button
-              id="layer1"
-              onClick={handleClick}
-              className="p-0 relative  w-full border-none bg-transparent cursor-pointer"
-            >
-              <img
-                src="/fsv.png"
-                width={500}
-                height={100}
-                className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                alt="FSV button image"
-              />
-              <span className="text-white font-bold text-md absolute bottom-0 left-2">FOREST RESERVE PATTERNS </span>
+              <motion.button
+                id="layer1"
+                onClick={handleClick}
+                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
+                // Framer Motion's whileHover prop
+                whileHover="hovered"
+                initial="rest"
+                variants={{
+                  rest: {}, // Initial state
+                  hovered: {}, // Hovered state (values will be applied to children)
+                }}
+              >
+                {/* Image with blur effect */}
+                <motion.img
+                  src="/fsv.png"
+                  width={500}
+                  height={100}
+                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
+                  alt="FSV button image"
+                  // Animate the filter (blur) on hover
+                  variants={{
+                    rest: { filter: "blur(0px)" },
+                    hovered: { filter: "blur(3px)" }, // Adjust blur amount as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for blur
+                />
 
-            </button>
-            <button
-              id="layer2"
-              onClick={handleClick}
-              className="p-0 relative  w-full border-none bg-transparent cursor-pointer"
-            >
-              <img
-                src="/fudv.png"
-                width={500}
-                height={100}
-                className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                alt="FUDV button image"
-              />
-              <span className="text-white font-bold text-md absolute bottom-0 left-2">FOREST USE NOTIFICATIONS</span>
-            </button>
-            <button
-              id="3d-ply-layer"
-              onClick={handleClick}
-              className="p-0 relative w-full border-none bg-transparent cursor-pointer"
-            >
-              <img
-                src="/pointcloud.jpg"
-                width={500}
-                height={100}
-                className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                alt="Point Clouds button image"
-              />
-              <span className="text-white font-bold text-md absolute bottom-0 left-2">POINT CLOUD</span>
+                {/* Text with font size expansion */}
+                <motion.span
+                  className="text-white font-bold text-md absolute bottom-0 left-2"
+                  // Animate font size on hover
+                  variants={{
+                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
+                    hovered: { fontSize: "1.75rem" }, // Expanded size, adjust as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for font size
+                >
+                  FOREST RESERVE PATTERNS
+                </motion.span>
+              </motion.button>
+              <motion.button
+                id="layer2"
+                onClick={handleClick}
+                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
+                // Framer Motion's whileHover prop
+                whileHover="hovered"
+                initial="rest"
+                variants={{
+                  rest: {}, // Initial state
+                  hovered: {}, // Hovered state (values will be applied to children)
+                }}
+              >
+                <motion.img
+                  src="/fudv.png"
 
-            </button>
+                  width={500}
+                  height={100}
+                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
+                  alt="FSV button image"
+                  // Animate the filter (blur) on hover
+                  variants={{
+                    rest: { filter: "blur(0px)" },
+                    hovered: { filter: "blur(3px)" },
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for blur
+                />
+
+                {/* Text with font size expansion */}
+                <motion.span
+                  className="text-white font-bold text-md absolute bottom-0 left-2"
+                  // Animate font size on hover
+                  variants={{
+                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
+                    hovered: { fontSize: "1.75em" }, // Expanded size, adjust as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for font size
+                >
+                  FOREST USE NOTIFICATIONS
+                </motion.span>
+              </motion.button>
+     
+              <motion.button
+                id="3d-ply-layer"
+                onClick={handleClick}
+                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
+                // Framer Motion's whileHover prop
+                whileHover="hovered"
+                initial="rest"
+                variants={{
+                  rest: {}, // Initial state
+                  hovered: {}, // Hovered state (values will be applied to children)
+                }}
+              >
+                {/* Image with blur effect */}
+                <motion.img
+                       src="/pointcloud.jpg"
+                  width={500}
+                  height={100}
+                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
+                  alt="FSV button image"
+                  // Animate the filter (blur) on hover
+                  variants={{
+                    rest: { filter: "blur(0px)" },
+                    hovered: { filter: "blur(3px)" }, // Adjust blur amount as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for blur
+                />
+
+                {/* Text with font size expansion */}
+                <motion.span
+                  className="text-white font-bold text-md absolute bottom-0 left-2"
+                  // Animate font size on hover
+                  variants={{
+                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
+                    hovered: { fontSize: "1.75rem" }, // Expanded size, adjust as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for font size
+                >
+                 FOREST POINT CLOUDS
+                </motion.span>
+              </motion.button>
 
             </ExpandableActions>
 
