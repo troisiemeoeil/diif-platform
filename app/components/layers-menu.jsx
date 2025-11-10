@@ -119,7 +119,7 @@ export default function ExpandableCards({
                         <div className="relative h-full w-[80px]">
 
                             <div className="absolute inset-0 " />
-                            <div className="absolute inset-0 flex flex-col justify-between  text-white">
+                            <div className="absolute inset-0 flex flex-col justify-between p-2 text-white">
 
                                 <div className="flex items-center gap-2">
                                     <button

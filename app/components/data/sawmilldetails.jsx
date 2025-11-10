@@ -10,11 +10,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-
-import {useState, useEffect } from "react"
 import { useControlSawmillModal } from "@/lib/state/store";
-
-import ExampleWithLocalizationProvider from "./data-tables/sawmillTable"
+import Example from "./data-tables/sawmillTable";
 
 
 function Sawmilldetails() {
@@ -23,11 +20,11 @@ function Sawmilldetails() {
 
 
     return (
-        <Dialog open={openState} onOpenChange={setOpenState}   modal={false}>
+        <Dialog open={openState} onOpenChange={setOpenState} modal={false} >
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
             </DialogTrigger>
-            <DialogContent showCloseButton={false} className="min-w-[90%] h-[90%] overflow-scroll z-80 p-2 m-0 ">
+            <DialogContent showCloseButton={false} className="min-w-[90%] h-[90%] overflow-scroll  z-999 p-2 m-0 ">
               
                 <DialogHeader  className="hidden">
                     <DialogTitle>Sawmill list of logs</DialogTitle>
@@ -35,9 +32,9 @@ function Sawmilldetails() {
                         Anyone who has this link will be able to view this.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex items-center gap-2 z-150">
+                <div className="flex items-center gap-2 z-150 ">
                     <div className="grid flex-1 gap-2">
-                        <ExampleWithLocalizationProvider />
+                        <Example />
                     </div>
                 </div>
                 <DialogFooter className="sm:justify-end h-[10px]">

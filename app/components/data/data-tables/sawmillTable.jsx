@@ -271,8 +271,6 @@ const Example = () => {
     });
   };
 
-
-
   const table = useMaterialReactTable({
     columns,
     data,
@@ -308,7 +306,6 @@ const Example = () => {
         <Dialog>
           <DialogTrigger>
             <div>
-
               <a
                 onClick={() => handleViewDetails(row)}
 
@@ -318,7 +315,7 @@ const Example = () => {
               </a>
             </div>
           </DialogTrigger>
-          <DialogContent className="z-100">
+          <DialogContent className="z-999">
             <DialogHeader>
               <DialogTitle className="my-3">The origin stem to the queried log is:</DialogTitle>
               <DialogDescription asChild>
