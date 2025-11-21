@@ -37,9 +37,9 @@ export default function MapProvider({
     layer2:
       "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
     layer3:
-      "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-        layer4:
-      "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+  "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Angränsande_slänter_med_kraftig_lutning37685&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+    layer4:
+      "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Ravinformation_-_Vattendrag_i_anslutning31827&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
   };
   //  const [layerType, setLayerType] = useState("wms");
   const [activeLayer, setActiveLayer] = useState("layer1"); // layer1 or layer
@@ -57,9 +57,6 @@ export default function MapProvider({
       attributionControl: false,
       logoPosition: "bottom-right",
     });
-
-
-
 
 
     map.current.on("load", () => {
@@ -529,7 +526,7 @@ export default function MapProvider({
                   Unstable Slopes - Very Strong Incline (SWE)
                 </motion.span>
               </motion.button>
-       <motion.button
+              <motion.button
                 id="layer4"
                 onClick={handleClick}
                 className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
@@ -609,7 +606,7 @@ export default function MapProvider({
                   FOREST POINT CLOUDS
                 </motion.span>
               </motion.button>
-  
+
             </ExpandableActions>
 
           </div>
