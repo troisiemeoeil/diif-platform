@@ -27,6 +27,7 @@ import {
 import { useAppStore, useControlSawmillModal } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import ThreeScene from "../3d-viewer/3d-context";
 
 // --- START: Helper function defined once (can be moved to a utilities file) ---
 const flattenLogData = (log) => {
@@ -84,7 +85,7 @@ export default function Details() {
 
   return (
     <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
-      <DialogContent className="max-w-fit">
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle>Detailed Information</DialogTitle>
           <DialogDescription>Stem Key: {stemKey}</DialogDescription>
@@ -97,7 +98,7 @@ export default function Details() {
           </TabsList>
 
           {/* Stem Info Tab */}
-          <TabsContent value="stemInfo" className="w-[80%]">
+          <TabsContent value="stemInfo" className="w-[50vw] flex gap-8">
             <Table>
               <TableHeader>
                 <TableRow className="text-center">
@@ -116,6 +117,10 @@ export default function Details() {
                 ))}
               </TableBody>
             </Table>
+            <div className="w-full min-h-[40vh] rounded-3xl">
+              <h1 className="text-lg font-medium">3D Model</h1>
+              <ThreeScene />
+            </div>
           </TabsContent>
 
           {/* Logs Tab */}
@@ -130,11 +135,6 @@ export default function Details() {
     </Dialog>
   );
 }
-
-
-// =======================================
-// StemLogsTable Component 
-// =======================================
 
 export function StemLogsTable({ stemDetails }) {
 
@@ -172,7 +172,7 @@ export function StemLogsTable({ stemDetails }) {
       setLogNumber(similarDocs[0].LogNr)
       setTriggerBackTracking(true)
       setOpenModal(true)
-      
+
     } catch (error) {
       console.error("Error finding similar documents:", error);
       setIsFetchingSimilar(false);
