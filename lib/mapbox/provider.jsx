@@ -36,6 +36,10 @@ export default function MapProvider({
       "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
     layer2:
       "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
+    layer3:
+      "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+        layer4:
+      "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
   };
   //  const [layerType, setLayerType] = useState("wms");
   const [activeLayer, setActiveLayer] = useState("layer1"); // layer1 or layer
@@ -375,7 +379,7 @@ export default function MapProvider({
   useEffect(() => {
     if (!map.current || !loaded) return;
 
-    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2'];
+    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2', 'layer3', 'layer4'];
 
     allLayerIds.forEach((layerId) => {
       if (!map.current.getLayer(layerId)) return;
@@ -485,7 +489,86 @@ export default function MapProvider({
                   FOREST USE NOTIFICATIONS
                 </motion.span>
               </motion.button>
-     
+              <motion.button
+                id="layer3"
+                onClick={handleClick}
+                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
+                // Framer Motion's whileHover prop
+                whileHover="hovered"
+                initial="rest"
+                variants={{
+                  rest: {}, // Initial state
+                  hovered: {}, // Hovered state (values will be applied to children)
+                }}
+              >
+                <motion.img
+                  src="/stronglandslide.png"
+
+                  width={500}
+                  height={100}
+                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
+                  alt="Unstable Slopes - Very Strong Incline Image Layer"
+                  // Animate the filter (blur) on hover
+                  variants={{
+                    rest: { filter: "blur(0px)" },
+                    hovered: { filter: "blur(3px)" },
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for blur
+                />
+
+                {/* Text with font size expansion */}
+                <motion.span
+                  className="text-white font-bold text-sm absolute bottom-0 left-2"
+                  // Animate font size on hover
+                  variants={{
+                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
+                    hovered: { fontSize: "1.30em" }, // Expanded size, adjust as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for font size
+                >
+                  Unstable Slopes - Very Strong Incline (SWE)
+                </motion.span>
+              </motion.button>
+       <motion.button
+                id="layer4"
+                onClick={handleClick}
+                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
+                // Framer Motion's whileHover prop
+                whileHover="hovered"
+                initial="rest"
+                variants={{
+                  rest: {}, // Initial state
+                  hovered: {}, // Hovered state (values will be applied to children)
+                }}
+              >
+                <motion.img
+                  src="/watercourse.png"
+
+                  width={500}
+                  height={100}
+                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
+                  alt="Unstable Slopes - Very Strong Incline Image Layer"
+                  // Animate the filter (blur) on hover
+                  variants={{
+                    rest: { filter: "blur(0px)" },
+                    hovered: { filter: "blur(3px)" },
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for blur
+                />
+
+                {/* Text with font size expansion */}
+                <motion.span
+                  className="text-white font-bold text-sm absolute bottom-0 left-2"
+                  // Animate font size on hover
+                  variants={{
+                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
+                    hovered: { fontSize: "1.30em" }, // Expanded size, adjust as needed
+                  }}
+                  transition={{ duration: 0.3 }} // Smooth transition for font size
+                >
+                  Watercourses/Rivers (SWE)
+                </motion.span>
+              </motion.button>
               <motion.button
                 id="3d-ply-layer"
                 onClick={handleClick}
@@ -500,7 +583,7 @@ export default function MapProvider({
               >
                 {/* Image with blur effect */}
                 <motion.img
-                       src="/pointcloud.jpg"
+                  src="/pointcloud.jpg"
                   width={500}
                   height={100}
                   className="object-cover w-full h-33 rounded-md bg-blend-overlay"
@@ -523,10 +606,10 @@ export default function MapProvider({
                   }}
                   transition={{ duration: 0.3 }} // Smooth transition for font size
                 >
-                 FOREST POINT CLOUDS
+                  FOREST POINT CLOUDS
                 </motion.span>
               </motion.button>
-
+  
             </ExpandableActions>
 
           </div>
@@ -534,6 +617,8 @@ export default function MapProvider({
 
         {children}
       </MapContext.Provider>
+
+
       {!loaded ? (
         <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-[1000]">
           <div className="text-lg font-medium">Loading map...</div>

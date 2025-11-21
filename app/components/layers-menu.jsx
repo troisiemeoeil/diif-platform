@@ -124,11 +124,11 @@ export default function ExpandableCards({
                                 <div className="flex items-center gap-2">
                                     <button
                                         aria-label="Play video"
-                                        className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-background/30 backdrop-blur-sm transition-transform hover:scale-110"
+                                        className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white backdrop-blur-sm transition-transform hover:scale-110"
                                         type="button"
                                         onClick={() => handleCardClick(card.id)}
                                     >
-                                        <Layers className="h-6 w-6 text-white cursor-pointer" />
+                                        <Layers className="h-6 w-6 text-black cursor-pointer" />
                                        
                                     </button>
                                 </div>
@@ -138,7 +138,7 @@ export default function ExpandableCards({
                             {selectedCard === card.id && (
                                 <motion.div
                                     animate={{ width: "500px", opacity: 1, filter: "blur(0px)" }}
-                                    className="absolute top-0 right-0 h-full bg-background "
+                                    className="absolute top-0 right-0 h-full bg-background overflow-y-scroll"
                                     exit={{ width: 0, opacity: 0, filter: "blur(5px)" }}
                                     initial={{ width: 0, opacity: 0, filter: "blur(5px)" }}
                                     transition={{
@@ -149,7 +149,7 @@ export default function ExpandableCards({
                                 >
                                     <motion.div
                                         animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                                        className="flex h-full flex-col items-end  justify-between p-4"
+                                        className="flex h-[800px] flex-col items-end  justify-between p-4  "
                                         exit={{ opacity: 0, x: 20, filter: "blur(5px)" }}
                                         initial={{ opacity: 0, x: 20, filter: "blur(5px)" }}
                                         transition={{ delay: 0.4, duration: 0.3 }}
