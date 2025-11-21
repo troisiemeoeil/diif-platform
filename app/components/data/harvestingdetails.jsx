@@ -27,7 +27,7 @@ import {
 import { useAppStore, useControlSawmillModal } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import ThreeScene from "../3d-viewer/3d-context";
+import ThreeViewer from "../3d-viewer/3d-context";
 
 // --- START: Helper function defined once (can be moved to a utilities file) ---
 const flattenLogData = (log) => {
@@ -98,7 +98,7 @@ export default function Details() {
           </TabsList>
 
           {/* Stem Info Tab */}
-          <TabsContent value="stemInfo" className="w-[50vw] flex gap-8">
+          <TabsContent value="stemInfo" className="w-[50vw] flex items-start gap-8">
             <Table>
               <TableHeader>
                 <TableRow className="text-center">
@@ -117,15 +117,19 @@ export default function Details() {
                 ))}
               </TableBody>
             </Table>
-            <div className="w-full min-h-[40vh] rounded-3xl">
-              <h1 className="text-lg font-medium">3D Model</h1>
-              <ThreeScene />
+            <div className="w-full min-h-[40vh] rounded-3xl mt-2">
+              <h1 className="text-sm font-bold text-black ">3D Model</h1>
+              <ThreeViewer modelPath="/models/spruce_tree.glb" YaxisOffset={15} />
             </div>
           </TabsContent>
 
           {/* Logs Tab */}
-          <TabsContent value="logs">
+          <TabsContent value="logs" className="w-[65vw]  flex mt-2 gap-2" >
             <StemLogsTable stemDetails={stemDetails} />
+            <div className="w-[70vw]  min-h-[40vh] rounded-3xl">
+              <h1 className="text-sm font-bold text-black">3D Model</h1>
+              <ThreeViewer modelPath="/models/log2.glb" YaxisOffset={-1} />
+            </div>
           </TabsContent>
         </Tabs>
 
@@ -192,7 +196,7 @@ export function StemLogsTable({ stemDetails }) {
         const logId = `log-${log.LogKey}`;
 
         return (
-          <AccordionItem className="w-[400px]" key={logId} value={logId}>
+          <AccordionItem className="w-full" key={logId} defaultValue={logId} value={logId}>
 
             <AccordionTrigger className="font-semibold text-left">
               Log Number: {log.LogKey} (Product: {log.ProductKey})
@@ -204,7 +208,7 @@ export function StemLogsTable({ stemDetails }) {
                   <TableBody className="max-h-60 overflow-y-auto block">
                     {transformedLogData.map((item) => (
 
-                      <TableRow key={item.key}>
+                      <TableRow key={item.key} >
                         <TableCell className="w-[100%] font-medium text-gray-600">
                           {item.key}
                         </TableCell>
