@@ -20,7 +20,7 @@ export default function CsvUploader() {
 
 
     return (
-        <div className='absolute top-3 right-2'>
+        <div className='items-end'>
             <Dialog>
 
                 <DialogTrigger asChild>

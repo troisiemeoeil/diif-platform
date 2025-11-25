@@ -5,10 +5,8 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapContext } from "@/context/map-context";
 import { AnimatePresence, motion } from "motion/react";
-
+import StemPopup from "@/app/components/data/HPR/HprStem"
 import dynamic from "next/dynamic";
-import * as THREE from 'three';
-import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 
 const Details = dynamic(() => import("@/app/components/data/harvestingdetails"), {
   ssr: false,
@@ -17,8 +15,6 @@ const Details = dynamic(() => import("@/app/components/data/harvestingdetails"),
 import { useAppStore } from "@/lib/state/store";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, Icon } from "lucide-react";
-import Image from "next/image";
-import ExpandableActions from "@/app/components/layers-menu"
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 export default function MapProvider({
@@ -29,20 +25,9 @@ export default function MapProvider({
   const map = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
-  const [activeLayerIds, setActiveLayerIds] = useState(['3d-ply-layer',]);
-
-  const wmsLayers = {
-    layer1:
-      "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
-    layer2:
-      "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
-    layer3:
-  "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Angränsande_slänter_med_kraftig_lutning37685&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-    layer4:
-      "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Ravinformation_-_Vattendrag_i_anslutning31827&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-  };
-  //  const [layerType, setLayerType] = useState("wms");
-  const [activeLayer, setActiveLayer] = useState("layer1"); // layer1 or layer
+  const sidebarState = useAppStore((s) => s.sidebarState)
+  const setMap = useAppStore((s) => s.setMap)
+  const countryCode = useAppStore((s) => s.country);
 
 
   useEffect(() => {
@@ -58,18 +43,11 @@ export default function MapProvider({
       logoPosition: "bottom-right",
     });
 
+    setMap(map.current);
 
     map.current.on("load", () => {
       setLoaded(true);
-      map.current.flyTo({
-        center: [22.4187199, 61.7570299],
-        zoom: 15,
-        speed: 0.75,
-        curve: 1,
-        essential: true,
-      });
     });
-
 
     map.current.on("style.load", () => {
       if (!map.current.getSource('diif')) {
@@ -81,106 +59,6 @@ export default function MapProvider({
           clusterMaxZoom: 14,
           clusterRadius: 40
         });
-
-        Object.entries(wmsLayers).forEach(([key, url]) => {
-          if (!map.current.getSource(key)) {
-            map.current.addSource(key, {
-              type: "raster",
-              tiles: [url],
-              tileSize: 256,
-            });
-
-            map.current.addLayer({
-              id: key,
-              type: "raster",
-              source: key,
-              layout: { visibility: activeLayerIds.includes(key) ? "visible" : "none" },
-            });
-          }
-        });
-
-
-        const customLayer = {
-          id: '3d-ply-layer',
-          type: 'custom',
-          renderingMode: '3d',
-          layout: {
-            visibility: 'visible'
-          },
-          onAdd: function (map, gl) {
-            this.camera = new THREE.Camera();
-            this.scene = new THREE.Scene();
-            gl.cullFace(gl.BACK)
-
-            const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-            const directional = new THREE.DirectionalLight(0xffffff, 0.5);
-            this.scene.add(ambient);
-            this.scene.add(directional);
-
-            this.loader = new PLYLoader();
-            this.pointsLoaded = false;
-
-            this.loader.load('/300K_points.ply', (geometry) => {
-              geometry.computeBoundingBox();
-              geometry.center();
-
-              const material = new THREE.PointsMaterial({
-                size: 1.2,
-                vertexColors: !!geometry.hasAttribute('color'),
-                color: geometry.hasAttribute('color') ? undefined : 0x00ff88,
-                sizeAttenuation: true
-              });
-
-              this.points = new THREE.Points(geometry, material);
-              this.scene.add(this.points);
-
-              const lng = 22.4190383;
-              const lat = 61.7569133;
-              const alt = 20;
-
-              const merc = mapboxgl.MercatorCoordinate.fromLngLat({ lng, lat }, alt);
-              const scale = merc.meterInMercatorCoordinateUnits() * 2.25;
-              const offsetX = 0;
-              const offsetY = 0;
-              const offsetZ = 0;
-              const matrix = new THREE.Matrix4()
-                .makeTranslation(merc.x + offsetX, merc.y + offsetY, merc.z + offsetZ)
-                .multiply(new THREE.Matrix4().makeRotationZ(THREE.MathUtils.degToRad(18)))
-                .scale(new THREE.Vector3(scale, -scale, scale));
-              this.points.applyMatrix4(matrix);
-              this.pointsLoaded = true;
-              map.triggerRepaint();
-            });
-
-            map.on('styledata', () => {
-              if (this.pointsLoaded) {
-                map.triggerRepaint();
-              }
-            });
-
-            this.renderer = new THREE.WebGLRenderer({
-              canvas: map.getCanvas(),
-              context: gl,
-              antialias: true
-            });
-
-            this.renderer.autoClear = false;
-            this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-          },
-
-          render: function (gl, matrix) {
-            if (!this.pointsLoaded) return;
-
-            const m = new THREE.Matrix4().fromArray(matrix);
-            this.camera.projectionMatrix = m;
-            this.renderer.render(this.scene, this.camera);
-            map.current.triggerRepaint();
-            this.renderer.resetState()
-          }
-        };
-
-        //add point clouds layer
-        map.current.addLayer(customLayer);
 
         //add clustered points 1K layer
         map.current.addLayer({
@@ -251,9 +129,6 @@ export default function MapProvider({
     });
 
 
-
-
-
     if (map.current.hasInteraction && map.current.hasInteraction('click-clusters')) {
       map.current.removeInteraction('click-clusters');
     }
@@ -307,6 +182,7 @@ export default function MapProvider({
               useAppStore.getState().setSheetOpen(true);
             }}
           />
+
         );
 
         new mapboxgl.Popup()
@@ -374,243 +250,37 @@ export default function MapProvider({
   }, [initialViewState, mapContainerRef]);
 
   useEffect(() => {
-    if (!map.current || !loaded) return;
+    if (!map.current) return;
 
-    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2', 'layer3', 'layer4'];
+    const coordinates = countryCode === "DIIF (SWE)" 
+      ? [ 20.263035, 63.825848]
+      : [22.4187199, 61.7570299];
 
-    allLayerIds.forEach((layerId) => {
-      if (!map.current.getLayer(layerId)) return;
-      const visibility = activeLayerIds.includes(layerId) ? 'visible' : 'none';
-      map.current.setLayoutProperty(layerId, 'visibility', visibility);
+    map.current.flyTo({
+      center: coordinates,
+      zoom: 15,
+      speed: 0.75,
+      curve: 1,
+      essential: true,
     });
-  }, [activeLayerIds, loaded]);
+  }, [countryCode]);
 
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      map.current?.resize();
+    }, 300);
 
-  const handleClick = (e) => {
-    const layerId = e.currentTarget.id;
-    if (!layerId) return;
+    return () => clearTimeout(timer);
+  }, [sidebarState])
 
-    setActiveLayerIds((prev) =>
-      prev.includes(layerId)
-        ? prev.filter((id) => id !== layerId)
-        : [...prev, layerId]
-    );
-  };
+
 
   return (
     <div className="">
       <MapContext.Provider value={{ map: map.current }}>
 
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[999]">
-          <div className="absolute top-2 left-2 flex flex-col gap-4 pointer-events-auto">
-            <ExpandableActions>
 
-              <motion.button
-                id="layer1"
-                onClick={handleClick}
-                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
-                // Framer Motion's whileHover prop
-                whileHover="hovered"
-                initial="rest"
-                variants={{
-                  rest: {}, // Initial state
-                  hovered: {}, // Hovered state (values will be applied to children)
-                }}
-              >
-                {/* Image with blur effect */}
-                <motion.img
-                  src="/fsv.png"
-                  width={500}
-                  height={100}
-                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                  alt="FSV button image"
-                  // Animate the filter (blur) on hover
-                  variants={{
-                    rest: { filter: "blur(0px)" },
-                    hovered: { filter: "blur(3px)" }, // Adjust blur amount as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for blur
-                />
-
-                {/* Text with font size expansion */}
-                <motion.span
-                  className="text-white font-bold text-md absolute bottom-0 left-2"
-                  // Animate font size on hover
-                  variants={{
-                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
-                    hovered: { fontSize: "1.75rem" }, // Expanded size, adjust as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for font size
-                >
-                  FOREST RESERVE PATTERNS
-                </motion.span>
-              </motion.button>
-              <motion.button
-                id="layer2"
-                onClick={handleClick}
-                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
-                // Framer Motion's whileHover prop
-                whileHover="hovered"
-                initial="rest"
-                variants={{
-                  rest: {}, // Initial state
-                  hovered: {}, // Hovered state (values will be applied to children)
-                }}
-              >
-                <motion.img
-                  src="/fudv.png"
-
-                  width={500}
-                  height={100}
-                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                  alt="FSV button image"
-                  // Animate the filter (blur) on hover
-                  variants={{
-                    rest: { filter: "blur(0px)" },
-                    hovered: { filter: "blur(3px)" },
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for blur
-                />
-
-                {/* Text with font size expansion */}
-                <motion.span
-                  className="text-white font-bold text-md absolute bottom-0 left-2"
-                  // Animate font size on hover
-                  variants={{
-                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
-                    hovered: { fontSize: "1.75em" }, // Expanded size, adjust as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for font size
-                >
-                  FOREST USE NOTIFICATIONS
-                </motion.span>
-              </motion.button>
-              <motion.button
-                id="layer3"
-                onClick={handleClick}
-                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
-                // Framer Motion's whileHover prop
-                whileHover="hovered"
-                initial="rest"
-                variants={{
-                  rest: {}, // Initial state
-                  hovered: {}, // Hovered state (values will be applied to children)
-                }}
-              >
-                <motion.img
-                  src="/stronglandslide.png"
-
-                  width={500}
-                  height={100}
-                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                  alt="Unstable Slopes - Very Strong Incline Image Layer"
-                  // Animate the filter (blur) on hover
-                  variants={{
-                    rest: { filter: "blur(0px)" },
-                    hovered: { filter: "blur(3px)" },
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for blur
-                />
-
-                {/* Text with font size expansion */}
-                <motion.span
-                  className="text-white font-bold text-sm absolute bottom-0 left-2"
-                  // Animate font size on hover
-                  variants={{
-                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
-                    hovered: { fontSize: "1.30em" }, // Expanded size, adjust as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for font size
-                >
-                  Unstable Slopes - Very Strong Incline (SWE)
-                </motion.span>
-              </motion.button>
-              <motion.button
-                id="layer4"
-                onClick={handleClick}
-                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
-                // Framer Motion's whileHover prop
-                whileHover="hovered"
-                initial="rest"
-                variants={{
-                  rest: {}, // Initial state
-                  hovered: {}, // Hovered state (values will be applied to children)
-                }}
-              >
-                <motion.img
-                  src="/watercourse.png"
-
-                  width={500}
-                  height={100}
-                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                  alt="Unstable Slopes - Very Strong Incline Image Layer"
-                  // Animate the filter (blur) on hover
-                  variants={{
-                    rest: { filter: "blur(0px)" },
-                    hovered: { filter: "blur(3px)" },
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for blur
-                />
-
-                {/* Text with font size expansion */}
-                <motion.span
-                  className="text-white font-bold text-sm absolute bottom-0 left-2"
-                  // Animate font size on hover
-                  variants={{
-                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
-                    hovered: { fontSize: "1.30em" }, // Expanded size, adjust as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for font size
-                >
-                  Watercourses/Rivers (SWE)
-                </motion.span>
-              </motion.button>
-              <motion.button
-                id="3d-ply-layer"
-                onClick={handleClick}
-                className="p-0 relative w-full border-none bg-transparent cursor-pointer overflow-hidden rounded-md group" // Added 'group' for easier image targeting
-                // Framer Motion's whileHover prop
-                whileHover="hovered"
-                initial="rest"
-                variants={{
-                  rest: {}, // Initial state
-                  hovered: {}, // Hovered state (values will be applied to children)
-                }}
-              >
-                {/* Image with blur effect */}
-                <motion.img
-                  src="/pointcloud.jpg"
-                  width={500}
-                  height={100}
-                  className="object-cover w-full h-33 rounded-md bg-blend-overlay"
-                  alt="FSV button image"
-                  // Animate the filter (blur) on hover
-                  variants={{
-                    rest: { filter: "blur(0px)" },
-                    hovered: { filter: "blur(3px)" }, // Adjust blur amount as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for blur
-                />
-
-                {/* Text with font size expansion */}
-                <motion.span
-                  className="text-white font-bold text-md absolute bottom-0 left-2"
-                  // Animate font size on hover
-                  variants={{
-                    rest: { fontSize: "1rem" }, // Default size (text-md is usually 1rem)
-                    hovered: { fontSize: "1.75rem" }, // Expanded size, adjust as needed
-                  }}
-                  transition={{ duration: 0.3 }} // Smooth transition for font size
-                >
-                  FOREST POINT CLOUDS
-                </motion.span>
-              </motion.button>
-
-            </ExpandableActions>
-
-          </div>
-        </div>
 
         {children}
       </MapContext.Provider>
@@ -628,31 +298,5 @@ export default function MapProvider({
     </div>
   );
 }
-
-
-function StemPopup({ stemKey, stemInfo, onOpen }) {
-  return (
-    <div style={{ padding: "8px 8px", width: "auto", borderRadius: "0" }}>
-
-      <div className="flex justify-between items-start">
-        <div>
-          <div className="flex flex-col ">
-            <h1 className="text-sm">
-              <strong>Stem Number</strong>
-            </h1>
-            <span className="text-5xl font-bold">{stemInfo.StemNumber}</span>
-            <h3 className="text-xs text-gray-400">Species Group Key: <strong className="text-gray-600">{stemInfo.SpeciesGroupKey}</strong></h3>
-          </div>
-        </div>
-        <ArrowUpRight
-
-          className="cursor-pointer p-1 bg-black text-white w-[35px] h-auto border-0 rounded-full hover:bg-gray-500"
-          onClick={() => onOpen(stemKey, stemInfo)}
-        />
-      </div>
-    </div>
-  );
-}
-
 
 

@@ -86,7 +86,7 @@ export default function ExpandableCards({
 
     return (
         <div
-            className={`flex w-full flex-col gap-4 overflow-hidden  ${className}`}
+            className={`flex w-fit flex-col gap-6 overflow-hidden z-9 mt-2 ${className}`}
         >
             <div
                 className="scrollbar-hide mx-auto flex overflow-x-auto "
@@ -100,7 +100,7 @@ export default function ExpandableCards({
                     <motion.div
                         animate={{
                             width: selectedCard === card.id ? "500px" : "",
-                            height: selectedCard === card.id ? "500px" : "",
+                            height: selectedCard === card.id ? "800px" : "",
 
                         }}
                         className={`relative mr-4 h-[80px] shrink-0  overflow-hidden rounded-2xl    ${cardClassName}`}
@@ -128,7 +128,7 @@ export default function ExpandableCards({
                                         type="button"
                                         onClick={() => handleCardClick(card.id)}
                                     >
-                                        <Layers className="h-6 w-6 text-black cursor-pointer" />
+                                        <Layers className="h-6 w-6 z-99999 text-black cursor-pointer" />
                                        
                                     </button>
                                 </div>
@@ -138,7 +138,7 @@ export default function ExpandableCards({
                             {selectedCard === card.id && (
                                 <motion.div
                                     animate={{ width: "500px", opacity: 1, filter: "blur(0px)" }}
-                                    className="absolute top-0 right-0 h-full bg-background overflow-y-scroll"
+                                    className="absolute top-0 right-0 h-full bg-background "
                                     exit={{ width: 0, opacity: 0, filter: "blur(5px)" }}
                                     initial={{ width: 0, opacity: 0, filter: "blur(5px)" }}
                                     transition={{
@@ -149,7 +149,7 @@ export default function ExpandableCards({
                                 >
                                     <motion.div
                                         animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                                        className="flex h-[800px] flex-col items-end  justify-between p-4  "
+                                        className="flex h-[90%] flex-col items-end  justify-between p-4 gap-2"
                                         exit={{ opacity: 0, x: 20, filter: "blur(5px)" }}
                                         initial={{ opacity: 0, x: 20, filter: "blur(5px)" }}
                                         transition={{ delay: 0.4, duration: 0.3 }}

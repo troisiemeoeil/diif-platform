@@ -65,20 +65,20 @@ export default function MapStyles() {
   }, [activeStyle]);
 
   return (
-    <aside className="absolute bottom-4 left-4 z-10">
-      <Tabs value={activeStyle} onValueChange={handleChange}>
-        <TabsList className="bg-background  h-full  shadow-xl">
+    <aside className="relative z-10">
+      <Tabs className="relative" value={activeStyle} onValueChange={handleChange}>
+        <TabsList className="bg-background  h-auto shadow-xl">
           {STYLE_OPTIONS.map((style) => (
             <TabsTrigger
               key={style.id}
               value={style.id}
-              className="data-[state=active]:border-gray-300 data-[state=active]:border-2 data-[state=active]:margin-1 text-smflex flex-col items-center "
+              className="data-[state=active]:border-gray-300 data-[state=active]:border-2 data-[state=active]:margin-1 text-sm flex flex-col items-center "
             >
               {/* <div className="">
                 {style.icon}
               </div> */}
-              <img className="relative object-cover  w-18 h-18 rounded-lg" width="75" height="auto" src={style.image} />
-                <span className="hidden text-xs sm:inline">{style.label}</span>
+              <img className="relative object-cover  w-14 h-14 rounded-lg" width="75" height="auto" src={style.image} />
+                {/* <span className="hidden text-xs sm:inline">{style.label}</span> */}
 
             </TabsTrigger>
           ))}

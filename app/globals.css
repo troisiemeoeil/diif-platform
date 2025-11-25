@@ -186,7 +186,6 @@
   border-right-color: transparent;
 }
 
-
 .dark .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
   border-bottom-color: var(--card);
 }
@@ -202,5 +201,4 @@
 .dark .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
   border-left-color: var(--card);
 }
-
 

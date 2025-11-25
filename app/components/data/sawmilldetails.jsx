@@ -20,11 +20,11 @@ function Sawmilldetails() {
 
 
     return (
-        <Dialog open={openState} onOpenChange={setOpenState} modal={false} >
+        <Dialog open={openState} onOpenChange={setOpenState} modal={false}  >
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-[15%] absolute bottom-15 left-[45%] z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
+                <Button variant="outline" className="w-fit  z-20 rounded-full border-1 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
             </DialogTrigger>
-            <DialogContent showCloseButton={false} className="min-w-[90%] h-[90%] overflow-scroll  z-999 p-2 m-0 ">
+            <DialogContent showCloseButton={false} className="min-w-[75%] h-[90%] overflow-scroll  z-999 p-2 m-0 ">
               
                 <DialogHeader  className="hidden">
                     <DialogTitle>Sawmill list of logs</DialogTitle>

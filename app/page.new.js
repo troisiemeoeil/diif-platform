@@ -1,13 +1,9 @@
 // app/page.tsx
 "use client";
 import MapProvider from "@/lib/mapbox/provider";
-import { useRef, useState } from "react";
-import MapCotrols from "./components/map/map-controls";
+import { useRef } from "react";
 import MapStyles from "./components/map/map-styles";
 import MapControls from "./components/map/map-controls";
-import { Button } from "@/components/ui/button";
-import Sawmilldetails from "./components/data/sawmilldetails";
-import CsvUploader from "./components/csv-uploader";
 import Page from "./dashboard/page";
 import Layers from "./components/Layers/layers";
 
@@ -23,27 +19,31 @@ export default function Home() {
           latitude: 0,
           zoom: 2,
         }}
-
       >
-        <Page mapContainerRef={mapContainerRef} >
+        <Page mapContainerRef={mapContainerRef}>
 
-          <div
-            id="map-container"
-            ref={mapContainerRef}
-            className=" relative  h-full w-full flex flex-col items-start  "
-          >
-            <div className="flex flex-col  h-full items-start justify-between absolute bottom-2 mx-2 w-[98%]">
+          {/* Three-column layout: left sidebar (Layers), center map, right controls */}
+          <div className="h-full w-full flex">
+            {/* Left sidebar (Layers) - fixed width */}
+            <div className="w-72 border-r bg-background/50">
               <Layers />
-              <div className="flex justify-between items-end w-full ">
+            </div>
+
+            {/* Map container - flex grows */}
+            <div className="flex-1 relative">
+              <div id="map-container" ref={mapContainerRef} className="h-full w-full" />
+            </div>
+
+            {/* Right column for styles/controls - fixed width */}
+            <div className="w-56 border-l bg-background/50 p-2">
+              <div className="mb-4">
                 <MapStyles />
+              </div>
+              <div>
                 <MapControls />
               </div>
             </div>
           </div>
-
-
-
-
 
         </Page>
       </MapProvider>
