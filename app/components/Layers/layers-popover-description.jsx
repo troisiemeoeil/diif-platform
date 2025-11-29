@@ -8,28 +8,30 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Image from "next/image"
-
-export function LayersPopoverDescription({ title, imageUrl, content }) {
+export function LayersPopoverDescription({ title, imageUrl, content, legend }) {
     return (
         <Card className="w-full ">
-            <div className="w-full h-40 relative"> {/* The parent MUST have dimensions and be relative */}
-                <Image
-                    alt="fsv"
-                    src={imageUrl}
-                    fill
-                    quality={100}
-                    className="object-cover rounded-t-xl"
-                />
+            <div className="w-full h-40 relative">
+                {imageUrl ? (
+                    <img
+                        alt={title}
+                        src={imageUrl}
+                        className="w-full h-40 object-cover rounded-t-xl"
+                    />
+                ) : null}
             </div>
             <CardHeader className="flex flex-col">
                 <CardTitle className="text-4xl font-bold">{title}</CardTitle>
                 <CardDescription>
                     {content}
                 </CardDescription>
-
+                {legend ? (
+                    <img
+                        alt="legend"
+                        src={legend}
+                        className="object-cover rounded-t-xl mt-2"
+                    />
+                ) : null}
             </CardHeader>
             <CardContent>
 
@@ -38,3 +40,26 @@ export function LayersPopoverDescription({ title, imageUrl, content }) {
         </Card>
     )
 }
+
+
+export default function StylePopoverDescription({title, legendUrl}) {
+  return (
+   <Card className="w-full ">
+         
+            <CardHeader className="flex flex-col">
+                <CardTitle className="text-lg font-bold">{title}</CardTitle>
+        
+                {legendUrl ? (
+                    <img
+                        alt="legend"
+                        src={legendUrl}
+                        className="object-cover rounded-t-xl mt-2"
+                    />
+                ) : null}
+            </CardHeader>
+         
+
+        </Card>
+  )
+}
+

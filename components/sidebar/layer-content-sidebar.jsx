@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, CircleQuestionMark, Layers, SquareTerminal } from "lucide-react";
+import { ChevronRight, CircleQuestionMark, Layers, Map, SquareTerminal } from "lucide-react";
 
 import {
   Collapsible,
@@ -24,7 +24,7 @@ import * as THREE from 'three';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { Switch } from "../ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { LayersPopoverDescription } from "@/app/components/Layers/layers-popover-description";
+import StylePopoverDescription, { LayersPopoverDescription } from "@/app/components/Layers/layers-popover-description";
 
 export function LayerContentSidebar({
   items
@@ -32,25 +32,93 @@ export function LayerContentSidebar({
 
   const map = useAppStore((s) => s.map)
   const [activeLayerIds, setActiveLayerIds] = useState(['3d-ply-layer',]);
+  const [activeStyleIds, setActiveStyleIds] = useState({});
   const country = useAppStore((s) => s.country);
+  const [openLayerIds, setOpenLayerIds] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const wmsLayers = [
 
     {
       id: "layer1",
-      name: "FOREST RESERVE PATTERNS",
-      url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
+      name: "Forest Reserve Patterns",
+      url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+      style: [
+        {
+          title: "Base Map",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand"
+
+        },
+
+        {
+          title: "Stand Outline",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand%20outline%202&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand&style=Stand%20outline"
+
+        },
+        {
+          title: "Stand Mixed Forest",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand%20mixed%20forest&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand&style=Stand%20mixed%20forest"
+
+        },
+        {
+          title: "Stand Development Class",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand%20development%20class&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand&style=Stand%20development%20class"
+
+        },
+        {
+          title: "Stand Volume",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand%20volume&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand&style=Stand%20development%20class"
+
+        },
+        {
+          title: "Stand Cutting Proposals",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand%20cutting%20proposals&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand&style=Stand%20cutting%20proposals"
+
+        },
+        {
+          title: "Stand silviculture proposals",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&request=GetMap&layers=stand&styles=Stand%20silviculture%20proposals&format=image/png&transparent=true&version=1.3.0&height=256&width=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/stand/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=stand&style=Stand%20silviculture%20proposals"
+
+        },
+      ],
       image: "/fsv.png",
       country: "Finland",
       description: "Geographical data on forest stands and resources (metsävarakuvioita) provided by the Finnish Forest Centre (Metsäkeskus). This layer includes information on stand attributes (like age, species, and volume) and is fundamental for planning sustainable forest management and identifying forest resource patterns.",
+      legendUrl: ""
     },
     {
       id: "layer2",
-      name: "FOREST USE NOTIFICATIONS",
+      name: "Forest Use Notification",
       url: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
+      style: [
+        {
+          title: "Base Map",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=forestusedeclaration"
+        },
+        {
+          title: "Forest Use Declaration Cutting Realization Practice",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=Forest%20use%20declaration%20cutting%20realization%20practice&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=forestusedeclaration&style=Forest%20use%20declaration%20cutting%20realization%20practice"
+        },
+        {
+          title: "Forest Use Declaration Currently Valid",
+          url: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&request=GetMap&layers=forestusedeclaration&styles=Forest%20use%20declaration%20currently%20valid&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://avoin.metsakeskus.fi/rajapinnat/v1/forestusedeclaration/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=forestusedeclaration&style=Forest%20use%20declaration%20currently%20valid"
+        },
+
+      ],
       image: "/fudv.png",
       country: "Finland",
       description: "Displays the locations and outlines of Metsänkäyttöilmoitus (Forest Use Notifications) submitted to the Finnish Forest Centre. These are mandatory declarations for planned forest activities, such as commercial harvesting or thinning, ensuring legal compliance and allowing for monitoring of felling intentions.",
+      legendUrl: ""
+
     },
     {
       id: "layer3",
@@ -59,6 +127,8 @@ export function LayerContentSidebar({
       image: "/stronglandslide.png",
       country: "Sweden",
       description: "Map layer from the Swedish Forest Agency (Skogsstyrelsen) identifying areas with a high risk of landslides and unstable slopes (Ras- och skredrisk). This is critical information for forestry planning to avoid activities that could trigger erosion or endanger personnel/infrastructure.",
+      legendUrl: "https://kartta.luke.fi/geoserver/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk"
+
     },
     {
       id: "layer4",
@@ -67,6 +137,8 @@ export function LayerContentSidebar({
       image: "/watercourse.png",
       country: "Sweden",
       description: "Geographic data from the Swedish Forest Agency (Skogsstyrelsen) showing water bodies, rivers, and stream channels. This layer is used to guide forest management practices near watercourses, protecting water quality, aquatic environments, and riparian zones.",
+      legendUrl: "https://kartta.luke.fi/geoserver/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk"
+
     },
     {
       id: "layer5",
@@ -75,13 +147,70 @@ export function LayerContentSidebar({
       image: "/harvestingplan.png",
       country: "Sweden",
       description: "A map layer showing submitted and registered Avverkningsanmälan (Harvesting Notifications/Plans) for final felling on productive forest land, managed by the Swedish Forest Agency (Skogsstyrelsen). \r\n  It indicates the planned locations for future major harvesting operations."
+      , legendUrl: ""
     },
     {
       id: "layer6",
-      name: "Water bodies sensitive to forestry",
-      url: "https://paikkatiedot.ymparisto.fi/geoserver/syke_metsataloudelleherkatvesistot/ows?SERVICE=WMS&&request=GetMap&layers=stand&styles=&format=image/png&transparent=true&version=1.1.1&height=256&width=256&srs=EPSG:3857&BBOX={bbox-epsg-3857}",
-      image: "harvestingplan.png",
+      name: "GeoServer",
+      url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=Climforisk:Drought_risk&STYLES=climforisk_drougthrisk&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+      style: [
+        {
+          title: "Drought damage probability of trees",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=Climforisk:Drought_risk&STYLES=climforisk_drougthrisk&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk"
+        },
+
+        {
+          title: "Leaf area index (LAI)",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=Climforisk%3ALAI_eff_one_sided_100m&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ALAI_eff_one_sided_100m"
+        },
+        {
+          title: "Kannot, kuusi, toteutunut hakkuukertymä",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=bma%3Abiomass_121&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_121"
+        },
+        {
+          title: "Latvusmassa, lehtipuu, toteutunut hakkuukertymä",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=bma%3Abiomass_127&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_127"
+        },
+        {
+          title: "Lehtipuut, kuorellinen runkopuu",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=3Abiomass_14&STYLES=climforisk_drougthrisk&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_14"
+        },
+        {
+          title: "Biomass, deciduous trees, roundwood with bark 2019 (10 kg/ha)",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MVMI:bm_lehtip_runkokuori_1519&STYLES=climforisk_drougthrisk&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=MVMI%3Abm_lehtip_runkokuori_1519"
+        },
+      ],
+      image: "drought.png",
       country: "Finland",
+      description: "Drought damage occurs in the form of defoliation or discolouration of foliage or even mortality of a tree. Probability of drought damage is expressed as the probability of finding a drought damaged tree in a stand.",
+      legendUrl: ""
+    },
+    {
+      id: "layer7",
+      name: "Harvestability Information",
+      url: "http://aineistot.metsakeskus.fi/metsakeskus/services/Korjuukelpoisuus/Korjuukelpoisuus/MapServer/WmsServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Avverkningsanmalan_Skogsstyrelsen&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+      image: "/harvestingplan.png",
+      country: "Finland",
+      description: "A map layer showing submitted and registered Avverkningsanmälan (Harvesting Notifications/Plans) for final felling on productive forest land, managed by the Swedish Forest Agency (Skogsstyrelsen). \r\n  It indicates the planned locations for future major harvesting operations.",
+      legendUrl: "",
+      style: [
+       {
+          title: "Harvestability Map",
+         url: "https://aineistot.metsakeskus.fi/metsakeskus/services/Korjuukelpoisuus/Korjuukelpoisuus/MapServer/WmsServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Korjuukelpoisuus&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=1024&HEIGHT=1024",
+          legendUrl: "/harvestability-map.png"
+        },
+          {
+          title: "Soil leaching suspectibility",
+         url: "https://aineistot.metsakeskus.fi/metsakeskus/services/Vesiensuojelu/Vesiuomien_maa_aineksen_huuhtoutumisriski/MapServer/WMSServer?request=GetMap&service=WMS?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=1&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=1024&HEIGHT=1024",
+          legendUrl: "http://aineistot.metsakeskus.fi/metsakeskus/services/Vesiensuojelu/Vesiuomien_maa_aineksen_huuhtoutumisriski/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=1"
+        }
+      ]
     }
 
   ];
@@ -91,7 +220,7 @@ export function LayerContentSidebar({
     if (!map) return;
 
     const addLayerIfNeeded = (layer) => {
-      const { id, url } = layer;
+      const { id, url, legendUrl } = layer;
       if (map.getSource(id)) return;
       map.addSource(id, {
         type: "raster",
@@ -106,7 +235,7 @@ export function LayerContentSidebar({
         layout: {
           visibility: activeLayerIds.includes(id) ? "visible" : "none",
         },
-      });
+      }, '3d-ply-layer'); // Always add WMS layers below the point cloud
     };
 
     if (map.isStyleLoaded && map.isStyleLoaded()) {
@@ -195,10 +324,8 @@ export function LayerContentSidebar({
       }
     };
 
-    //add point clouds layer at the bottom
-    // If style not loaded yet, add once on style.load
     const onStyleLoad = () => {
-      map.addLayer(customLayer, 'unclustered-point');
+      map.addLayer(customLayer, 'unclustered-point'); // Point cloud below unclustered points
       wmsLayers.forEach(addLayerIfNeeded);
 
       setLoaded(true);
@@ -215,34 +342,76 @@ export function LayerContentSidebar({
   useEffect(() => {
     if (!map) return;
 
-    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2', 'layer3', 'layer4', 'layer5'];
+    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2', 'layer3', 'layer4', 'layer5', "layer6", "layer7"];
 
     allLayerIds.forEach((layerId) => {
       if (!map.getLayer(layerId)) return;
-      const visibility = activeLayerIds.includes(layerId) ? 'visible' : 'none';
+
+      const layerStyles = activeStyleIds[layerId] || [];
+      const hasActiveStyles = layerStyles.length > 0;
+
+      const hasStyleOptions = wmsLayers.some(l => l.id === layerId && l.style);
+      const visibility = hasStyleOptions
+        ? 'none'
+        : (activeLayerIds.includes(layerId) ? 'visible' : 'none');
+
       map.setLayoutProperty(layerId, 'visibility', visibility);
     });
-  }, [activeLayerIds, map]);
+  }, [activeLayerIds, activeStyleIds, map, wmsLayers]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    // Update layers when styles change - support multiple active styles
+    wmsLayers.forEach((layer) => {
+      const layerStyles = activeStyleIds[layer.id] || [];
+
+      if (layer.style && layerStyles.length > 0) {
+        // Remove old style layers for this parent layer
+        layerStyles.forEach((styleIdx) => {
+          const styleLayerId = `${layer.id}-style-${styleIdx}`;
+
+          // Create or update the style layer
+          if (!map.getSource(styleLayerId)) {
+            const selectedStyle = layer.style[styleIdx];
+            map.addSource(styleLayerId, {
+              type: "raster",
+              tiles: [selectedStyle.url],
+              tileSize: 256,
+            });
+
+            map.addLayer({
+              id: styleLayerId,
+              type: "raster",
+              source: styleLayerId,
+              layout: {
+                visibility: 'visible'
+              }
+            }, '3d-ply-layer'); // Always add style sublayers below the point cloud
+          } else {
+            // Update visibility if layer exists
+            map.setLayoutProperty(styleLayerId, 'visibility', 'visible');
+          }
+        });
+      }
+
+      // Remove inactive style layers
+      if (layer.style) {
+        layer.style.forEach((_, styleIdx) => {
+          const styleLayerId = `${layer.id}-style-${styleIdx}`;
+          const isActive = (activeStyleIds[layer.id] || []).includes(styleIdx);
+
+          if (!isActive && map.getLayer(styleLayerId)) {
+            map.setLayoutProperty(styleLayerId, 'visibility', 'none');
+          }
+        });
+      }
+    });
+  }, [activeStyleIds, map, wmsLayers]);
 
 
 
-  const handleClick = (e) => {
-    e.preventDefault()
-    const layerId = e.currentTarget.id;
-    if (!layerId) return;
 
-    setActiveLayerIds((prev) =>
-      prev.includes(layerId)
-        ? prev.filter((id) => id !== layerId)
-        : [...prev, layerId]
-    );
-  };
-
-  const toggleLayer = (layerId) => {
-    setActiveLayerIds((prev) =>
-      prev.includes(layerId) ? prev.filter((id) => id !== layerId) : [...prev, layerId]
-    );
-  };
 
   const setLayerChecked = (layerId, checked) => {
     setActiveLayerIds((prev) => {
@@ -251,6 +420,25 @@ export function LayerContentSidebar({
       }
       return prev.includes(layerId) ? prev.filter((id) => id !== layerId) : prev;
     });
+  };
+
+  const setStyleChecked = (layerId, styleIdx, checked) => {
+    setActiveStyleIds((prev) => {
+      const layerStyles = prev[layerId] || [];
+      if (checked) {
+        const updatedStyles = layerStyles.includes(styleIdx) ? layerStyles : [...layerStyles, styleIdx];
+        return { ...prev, [layerId]: updatedStyles };
+      }
+      const updatedStyles = layerStyles.filter((idx) => idx !== styleIdx);
+      return { ...prev, [layerId]: updatedStyles };
+    });
+
+    // Ensure parent layer is active when a style is selected
+    if (checked) {
+      setActiveLayerIds((prev) => {
+        return prev.includes(layerId) ? prev : [...prev, layerId];
+      });
+    }
   };
 
   return (
@@ -275,28 +463,78 @@ export function LayerContentSidebar({
               <SidebarMenuSub>
                 {country && wmsLayers
                   .filter(layer => layer.country === country)
-                  .map(({ id, name, image, description }) => (
-                    <SidebarMenuSubItem key={id}>
-                      <SidebarMenuSubButton asChild>
-                        <div className="w-full flex items-center justify-between">
-                          <span>{name.toLowerCase()}</span>
-                          <div className="flex items-center gap-2">
-                            <Popover>
-                              <PopoverTrigger> <CircleQuestionMark size={16} /></PopoverTrigger>
-                              <PopoverContent side="right" align="center" sideOffset={80} className="w-[30vw]">
-                                <LayersPopoverDescription title={name} imageUrl={image} content={description} />
-                              </PopoverContent>
-                            </Popover>
+                  .map((layer) => (
+                    <div key={layer.id}>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <div className="w-full flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <span>{layer.name}</span>
+                            </div>
 
-                            <Switch
-                              id={id}
-                              checked={activeLayerIds.includes(id)}
-                              onCheckedChange={(checked) => setLayerChecked(id, checked)}
-                            />
+                            <div className="flex items-center gap-2">
+                              <Popover>
+                                <PopoverTrigger> <CircleQuestionMark size={16} /></PopoverTrigger>
+                                <PopoverContent side="right" align="center" sideOffset={45} className="w-[30vw]">
+                                  <LayersPopoverDescription title={layer.name} imageUrl={layer.image} content={layer.description} legend={layer.legendUrl} />
+                                </PopoverContent>
+                              </Popover>
+                              {/* 
+                              <Switch
+                                id={layer.id}
+                                checked={activeLayerIds.includes(layer.id)}
+                                onCheckedChange={(checked) => setLayerChecked(layer.id, checked)}
+                              /> */}
+
+                              <button
+                                type="button"
+                                aria-expanded={openLayerIds.includes(layer.id)}
+                                onClick={() =>
+                                  setOpenLayerIds((prev) =>
+                                    prev.includes(layer.id) ? prev.filter((i) => i !== layer.id) : [...prev, layer.id]
+                                  )
+                                }
+                                className="p-1 rounded hover:bg-muted"
+                              >
+                                <ChevronRight
+                                  className={`transition-transform ${openLayerIds.includes(layer.id) ? 'rotate-90' : ''}`}
+                                  size={16}
+                                />
+                              </button>
+                            </div>
                           </div>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+
+                      {/* render nested styles, if any */}
+                      {openLayerIds.includes(layer.id) && layer.style && (
+                        <div className="ml-6 mt-1">
+                          {layer.style.map((s, idx) => (
+                            <SidebarMenuSubItem key={`${layer.id}-style-${idx}`}>
+                              <SidebarMenuSubButton asChild>
+                                <div className="w-full flex items-center justify-between">
+                                  <span className="text-sm text-muted-foreground"> {s.title.length > 18 ? s.title.slice(0, 18) + "…" : s.title}</span>
+                                  <div className="flex items-center gap-2">
+                                    <Popover>
+                                      <PopoverTrigger> <Map size={16} /></PopoverTrigger>
+                                      <PopoverContent side="right" align="center" sideOffset={80} className="w-[20vw]">
+                                        <StylePopoverDescription title={s.title} legendUrl={s.legendUrl} />
+                                      </PopoverContent>
+                                    </Popover>
+                                    <Switch
+                                      id={`${layer.id}-style-${idx}`}
+                                      checked={(activeStyleIds[layer.id] || []).includes(idx)}
+                                      onCheckedChange={(checked) => setStyleChecked(layer.id, idx, checked)}
+                                    />
+                                  </div>
+
+                                </div>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
                         </div>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
+                      )}
+                    </div>
                   ))}
                 {
                   country === "Finland" && (
