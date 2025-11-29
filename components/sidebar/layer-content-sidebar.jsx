@@ -177,12 +177,12 @@ export function LayerContentSidebar({
         },
         {
           title: "Lehtipuut, kuorellinen runkopuu",
-          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=3Abiomass_14&STYLES=climforisk_drougthrisk&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=bma%3Abiomass_10&STYLES=bma:lehtip_latva&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
           legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_14"
         },
         {
           title: "Biomass, deciduous trees, roundwood with bark 2019 (10 kg/ha)",
-          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MVMI:bm_lehtip_runkokuori_1519&STYLES=climforisk_drougthrisk&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MVMI:bm_lehtip_runkokuori_1519&STYLES=bm_lehtip_runkokuori_0610&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
           legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=MVMI%3Abm_lehtip_runkokuori_1519"
         },
       ],
@@ -200,16 +200,32 @@ export function LayerContentSidebar({
       description: "A map layer showing submitted and registered Avverkningsanmälan (Harvesting Notifications/Plans) for final felling on productive forest land, managed by the Swedish Forest Agency (Skogsstyrelsen). \r\n  It indicates the planned locations for future major harvesting operations.",
       legendUrl: "",
       style: [
-       {
+        {
           title: "Harvestability Map",
-         url: "https://aineistot.metsakeskus.fi/metsakeskus/services/Korjuukelpoisuus/Korjuukelpoisuus/MapServer/WmsServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Korjuukelpoisuus&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=1024&HEIGHT=1024",
+          url: "https://aineistot.metsakeskus.fi/metsakeskus/services/Korjuukelpoisuus/Korjuukelpoisuus/MapServer/WmsServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Korjuukelpoisuus&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=1024&HEIGHT=1024",
           legendUrl: "/harvestability-map.png"
         },
-          {
+        {
           title: "Soil leaching suspectibility",
-         url: "https://aineistot.metsakeskus.fi/metsakeskus/services/Vesiensuojelu/Vesiuomien_maa_aineksen_huuhtoutumisriski/MapServer/WMSServer?request=GetMap&service=WMS?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=1&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=1024&HEIGHT=1024",
+          url: "https://aineistot.metsakeskus.fi/metsakeskus/services/Vesiensuojelu/Vesiuomien_maa_aineksen_huuhtoutumisriski/MapServer/WMSServer?request=GetMap&service=WMS?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=1&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=1024&HEIGHT=1024",
           legendUrl: "http://aineistot.metsakeskus.fi/metsakeskus/services/Vesiensuojelu/Vesiuomien_maa_aineksen_huuhtoutumisriski/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=1"
+        },
+        {
+          title: "Rock Surface Level",
+          url: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WMSServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Kallionpinnan_taso54480&STYLES=&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256",
+          legendUrl: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Kallionpinnan_taso54480"
+        },
+         {
+          title: "Soil Types ",
+          url: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WMSServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=maapera_200k_maalajit&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256",
+          legendUrl: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=maapera_200k_maalajit"
+        },
+         {
+          title: "Soil Surface Species ",
+          url: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WMSServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=maapera_20k_pintamaalajit&STYLES=&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256",
+          legendUrl: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=maapera_20k_pintamaalajit"
         }
+
       ]
     }
 
