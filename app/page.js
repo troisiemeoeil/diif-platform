@@ -2,52 +2,51 @@
 "use client";
 import MapProvider from "@/lib/mapbox/provider";
 import { useRef, useState } from "react";
-import MapCotrols from "./components/map/map-controls";
 import MapStyles from "./components/map/map-styles";
 import MapControls from "./components/map/map-controls";
-import { Button } from "@/components/ui/button";
-import Sawmilldetails from "./components/data/sawmilldetails";
-import CsvUploader from "./components/csv-uploader";
 import Page from "./dashboard/page";
 import Layers from "./components/Layers/layers";
+import Sawmilldetails from "./components/data/sawmilldetails";
+import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Home() {
   const mapContainerRef = useRef(null);
 
   return (
-    <div className="w-screen h-screen">
-      <MapProvider
-        mapContainerRef={mapContainerRef}
-        initialViewState={{
-          longitude: 0,
-          latitude: 0,
-          zoom: 2,
-        }}
 
-      >
-        <Page mapContainerRef={mapContainerRef} >
+      <div className="w-screen h-screen">
+        <MapProvider
+          mapContainerRef={mapContainerRef}
+          initialViewState={{
+            longitude: 0,
+            latitude: 0,
+            zoom: 2,
+          }}
 
-          <div
-            id="map-container"
-            ref={mapContainerRef}
-            className=" relative  h-full w-full flex flex-col items-start  "
-          >
-            <div className="flex flex-col  h-full items-start justify-between absolute bottom-2 mx-2 w-[98%]">
-              <Layers />
-              <div className="flex justify-between items-end w-full ">
-                <MapStyles />
-                <MapControls />
+        >
+
+
+            <Page mapContainerRef={mapContainerRef} >
+
+              <div
+                id="map-container"
+                ref={mapContainerRef}
+                className="relative h-full w-full"
+              >
+
+                <div className="w-full absolute bottom-2 right-2 flex justify-between items-end px-6 gap-2 z-10">
+                  <MapStyles />
+                  {/* <Layers /> */}
+                  <MapControls />
+                </div>
               </div>
-            </div>
-          </div>
+
+              <Sawmilldetails />
+            </Page>
 
 
+        </MapProvider>
 
-
-
-        </Page>
-      </MapProvider>
-
-    </div>
+      </div>
   );
 }

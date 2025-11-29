@@ -16,15 +16,13 @@ import Example from "./data-tables/sawmillTable";
 
 function Sawmilldetails() {
     const openState = useControlSawmillModal((s) => s.open)
-  const setOpenState = useControlSawmillModal((s) => s.setOpenModal);
+    const setOpenState = useControlSawmillModal((s) => s.setOpenModal);
 
 
     return (
-        <Dialog open={openState} onOpenChange={setOpenState} modal={false}  >
-            <DialogTrigger asChild>
-                <Button variant="outline" className="w-fit  z-20 rounded-full border-1 bg-white text-black hover:cursor-pointer">View Sawmill Data</Button>
-            </DialogTrigger>
-            <DialogContent showCloseButton={false} className="min-w-[75%] h-[90%] overflow-scroll  z-999 p-2 m-0 ">
+        <Dialog  open={openState} onOpenChange={setOpenState} modal={false}   >
+          
+            <DialogContent showCloseButton={false} className="   min-w-[70vw]  max-h-[90vh] overflow-auto z-[999] p-2 m-0">
               
                 <DialogHeader  className="hidden">
                     <DialogTitle>Sawmill list of logs</DialogTitle>
@@ -32,14 +30,14 @@ function Sawmilldetails() {
                         Anyone who has this link will be able to view this.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex items-center gap-2 z-150 ">
+                <div className="flex items-center gap-2 z-[150]">
                     <div className="grid flex-1 gap-2">
                         <Example />
                     </div>
                 </div>
                 <DialogFooter className="sm:justify-end h-[10px]">
                     <DialogClose asChild>
-                        <Button type="button" className="cursor-pointe " variant="secondary">
+                        <Button type="button" className="cursor-pointer" variant="secondary">
                             Close
                         </Button>
                     </DialogClose>

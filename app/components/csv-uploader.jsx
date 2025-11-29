@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button';
 import FileUpload04 from "./file-placeholder";
+import { CloudUpload } from "lucide-react";
 
 
 
@@ -24,7 +25,9 @@ export default function CsvUploader() {
             <Dialog>
 
                 <DialogTrigger asChild>
-                    <Button className='rounded-2xl cursor-pointer' variant="outline">Upload Sawmill Data</Button>
+                    <Button className='rounded-full cursor-pointer' variant="outline">
+                        <CloudUpload  />
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[60%] sm:max-h-[80vh]">
                     <DialogHeader>

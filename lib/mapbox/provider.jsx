@@ -252,7 +252,7 @@ export default function MapProvider({
   useEffect(() => {
     if (!map.current) return;
 
-    const coordinates = countryCode === "DIIF (SWE)" 
+    const coordinates = countryCode === "Sweden" 
       ? [ 20.263035, 63.825848]
       : [22.4187199, 61.7570299];
 

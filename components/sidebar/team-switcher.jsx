@@ -35,7 +35,7 @@ export function TeamSwitcher({
   const setCountryCode = useAppStore((s) => s.setCountry)
   const handleCountrySwitch = (team) => {
     setActiveTeam(team)
-    setCountryCode(team.name)
+    setCountryCode(team.plan)
   }
   useEffect(() => {
     
@@ -67,7 +67,7 @@ export function TeamSwitcher({
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}>
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
+              Areas
             </DropdownMenuLabel>
             {teams.map((team, index) => (
               <DropdownMenuItem key={team.name} onClick={() => handleCountrySwitch(team)} className="gap-2 p-2 z-9999">
