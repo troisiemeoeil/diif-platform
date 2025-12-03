@@ -1,76 +1,61 @@
 
 
-import { TrendingUp } from "lucide-react"
 import { Label, Pie, PieChart } from "recharts"
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import {
-    ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import { useMemo } from "react"
-import { AverageVolume } from "./averageVolume"
+
 
 export const description = "A donut chart with text"
 
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 190, fill: "var(--color-other)" },
-]
-
-const chartConfig = {
-    visitors: {
-        label: "Visitors",
-    },
-    chrome: {
-        label: "Spruce",
-        color: "var(--chart-1)",
-    },
-    safari: {
-        label: "Pine",
-        color: "var(--chart-2)",
-    },
-    firefox: {
-        label: "Birch",
-        color: "var(--chart-3)",
-    },
-    edge: {
-        label: "Oak",
-        color: "var(--chart-4)",
-    },
-    other: {
-        label: "Other",
-        color: "var(--chart-5)",
-    },
+const SPECIES_LABELS = {
+    "613": "Pine (Mänty)",
+    "614": "Spruce (Kuusi)",
+    "615": "Birch (Koivu)",
+    "616": "Other broadleaves (Muut lehtipuut)",
 }
 
-export function TotalNumberStem() {
-    const totalVisitors = useMemo(() => {
-        return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-    }, [])
+const SPECIES_COLORS = {
+    // Keep colors consistent with your theme palette
+    "613": "var(--chart-2)", // Pine
+    "614": "var(--chart-1)", // Spruce
+    "615": "var(--chart-3)", // Birch
+    "616": "var(--chart-5)", // Other broadleaves
+}
 
+export function TotalNumberStem({stemValue}) {
+    const pieData = useMemo(() => {
+        const items = Array.isArray(stemValue?.countsBySpecies)
+            ? stemValue.countsBySpecies
+            : []
+        return items.map(({ count, groupKey }) => ({
+            name: SPECIES_LABELS[groupKey] ?? String(groupKey),
+            value: count,
+            fill: SPECIES_COLORS[groupKey] ?? "var(--chart-4)",
+        }))
+    }, [stemValue])
+    
     return (
-        <Card className="w-full flex flex-col  p-2">
+        <Card className="w-full h-full flex flex-col  p-2">
             <CardHeader className="items-center pb-0 pt-2">
                 <CardTitle>Total number of Stems</CardTitle>
-                <CardDescription>Number of harvested Stems in selected area</CardDescription>
+                <CardDescription className="w-full text-[12px]">Categorized Number of Stems </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0">
                 <ChartContainer
-                    config={chartConfig}
-                    className="mx-auto aspect-square max-h-[250px]"
+                    config={{}}
+                    className="mx-auto aspect-square h-[200px]"
                 >
                     <PieChart>
                         <ChartTooltip
@@ -78,9 +63,9 @@ export function TotalNumberStem() {
                             content={<ChartTooltipContent hideLabel />}
                         />
                         <Pie
-                            data={chartData}
-                            dataKey="visitors"
-                            nameKey="browser"
+                            data={pieData}
+                            dataKey="value"
+                            nameKey="name"
                             innerRadius={60}
                             strokeWidth={5}
                         >
@@ -99,7 +84,7 @@ export function TotalNumberStem() {
                                                     y={viewBox.cy}
                                                     className="fill-foreground text-3xl font-bold"
                                                 >
-                                                    {totalVisitors.toLocaleString()}
+                                                    {Number(stemValue?.totalCount || 0).toLocaleString()}
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}
@@ -114,8 +99,16 @@ export function TotalNumberStem() {
                                 }}
                             />
                         </Pie>
+                  
                     </PieChart>
+                
                 </ChartContainer>
+                          {pieData.map((item, idx) => (
+                        <div key={`${item.name}-${idx}`} className="flex items-center gap-2 mt-2">
+                            <div className="w-3 h-3 rounded" style={{ backgroundColor: item.fill }} />
+                            <div className="text-xs text-muted-foreground">{item.name}</div>
+                        </div>
+                    ))}
             </CardContent>
 
         </Card>

@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { Bar, BarChart, XAxis } from "recharts"
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -18,72 +16,83 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A line chart"
+export const description = "A stacked bar chart with a legend"
 
-const chartData = [
-  { month: "Item 1", volume: 0.1032 },
-  { month: "Item 2", volume: 0.1049 },
-  { month: "Item 3", volume: 0.1057 },
-  { month: "Item 4", volume: 0.1024 },
-  { month: "Item 5", volume: 0.1041 },
-  { month: "Item 6", volume: 0.1038 },
-  { month: "Item 7", volume: 0.1063 },
-  { month: "Item 8", volume: 0.1029 },
-  { month: "Item 9", volume: 0.1035 },
-  { month: "Item 10", volume: 0.1047 },
-  { month: "Item 11", volume: 0.1051 },
-  { month: "Item 12", volume: 0.1030 },
-  { month: "Item 13", volume: 0.1044 },
-  { month: "Item 14", volume: 0.1027 },
-  { month: "Item 15", volume: 0.1054 },
-  { month: "Item 16", volume: 0.1042 },
-  { month: "Item 17", volume: 0.1033 },
-  { month: "Item 18", volume: 0.1058 },
-  { month: "Item 19", volume: 0.1046 },
-  { month: "Item 20", volume: 0.1037 },
-]
+
+
+const SPECIES_LABELS = {
+  "averageLogVolumeSob": "Average Log Volume Sob",
+  "averageLogVolumeSub": "Average Log Volume Sub",
+}
+
+const SPECIES_COLORS = {
+  "LogVolumeSub": "var(--chart-1)",
+  "LogVolumeSob": "var(--chart-2)",
+}
+
 
 const chartConfig = {
-  volume: {
-    label: "Volume",
-    color: "var(--chart-1)",
+  averageLogVolumeSob: {
+    label: "Average Log Volume Sob",
+    color: "var(--chart-3)",
   },
-} 
+  averageLogVolumeSub: {
+    label: "Average Log Volume Sub",
+    color: "var(--chart-6)",
+  },
+}
 
-export function AverageVolume() {
+
+export function AverageVolume({ stemValue }) {
+  // Guard against undefined/null stemValue
+  if (!stemValue) {
+    return null;
+  }
+
+  const chartData = [
+    {
+      averageLogVolumeSob: stemValue.averageLogVolumeSob,
+      averageLogVolumeSub: stemValue.averageLogVolumeSub 
+    },
+
+  ]
+
   return (
-    <Card className="w-full p-2">
-      <CardHeader className="pb-0 pt-2">
-        <CardTitle>Average Stem Volume</CardTitle>
-        <CardDescription>Calculate average volume of havrvested stems</CardDescription>
+    <Card className="p-2">
+      <CardHeader className="items-center pb-0 pt-2">
+        <CardTitle>Average Log Volume</CardTitle>
+        <CardDescription className="text-[12px]">Average volume measurements for logs.</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-         
+          <BarChart accessibilityLayer data={chartData} barSize={16}>
+            <XAxis hide />
+            <Bar
+              dataKey="averageLogVolumeSob"
+              stackId="a"
+              fill="var(--color-averageLogVolumeSob)"
+              radius={[0, 0, 4, 4]}
+            />
+            <Bar
+              dataKey="averageLogVolumeSub"
+              stackId="a"
+              fill="var(--color-averageLogVolumeSub)"
+              radius={[4, 4, 0, 0]}
+            />
             <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => {
+                
+                  }}
+                />
+              }
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              defaultIndex={2}
             />
-            <Line
-              dataKey="volume"
-              type="natural"
-              stroke="var(--color-volume)"
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
- 
     </Card>
   )
 }
