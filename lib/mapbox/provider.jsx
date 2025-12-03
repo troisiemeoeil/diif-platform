@@ -287,7 +287,7 @@ export default function MapProvider({
 
 
       {!loaded ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-[1000]">
+        <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-1000">
           <div className="text-lg font-medium">Loading map...</div>
         </div>
       ) : (

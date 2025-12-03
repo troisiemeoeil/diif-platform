@@ -9,6 +9,7 @@ import Layers from "./components/Layers/layers";
 import Sawmilldetails from "./components/data/sawmilldetails";
 import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
 import { useAppStore } from "@/lib/state/store";
+import { SummaryHPR } from "./components/data/summary-hpr/summaryHpr";
 
 export default function Home() {
   const mapContainerRef = useRef(null);
@@ -27,32 +28,34 @@ export default function Home() {
         >
 
 
-            <Page mapContainerRef={mapContainerRef} >
+          <Page mapContainerRef={mapContainerRef} >
 
-              <div
-                id="map-container"
-                ref={mapContainerRef}
-                className="relative h-full w-full"
-              >
-
-                <div className="w-full absolute bottom-2 right-2 flex justify-between items-end px-6 gap-2 z-10">
-                  <MapStyles />
-                     {legendUrl !== "" ? (
-                    <img
-                        alt="legend"
-                        src={legendUrl}
-                        className="w-full h-40 object-cover rounded-t-xl"
-                    />
-                ) : null}
-                  
-                  {/* <Layers /> */}
-                  <MapControls />
-
-                </div>
+            <div
+              id="map-container"
+              ref={mapContainerRef}
+              className="relative h-full w-full"
+            >
+              <div className="absolute top-0 right-0 z-20 p-2">
+                <SummaryHPR />
               </div>
+              <div className="w-full absolute bottom-2 right-2 flex justify-between items-end px-6 gap-2 z-10">
+                <MapStyles />
 
-              <Sawmilldetails />
-            </Page>
+                {legendUrl !== "" ? (
+                  <img
+                    alt="legend"
+                    src={legendUrl}
+                    className="w-full h-40 object-cover rounded-t-xl"
+                  />
+                ) : null}
+
+                <MapControls />
+
+              </div>
+            </div>
+
+            <Sawmilldetails />
+          </Page>
 
 
         </MapProvider>

@@ -12,7 +12,9 @@ function StemPopup({ stemKey, stemInfo, onOpen }) {
               <strong>Stem Number</strong>
             </h1>
             <span className="text-5xl font-bold">{stemInfo.StemNumber}</span>
-            <h3 className="text-xs text-gray-400">Species Group Key: <strong className="text-gray-600">{stemInfo.SpeciesGroupKey}</strong></h3>
+            <h3 className="text-xs text-gray-400">Species Group: <strong className="text-gray-600">{stemInfo.SpeciesGroupKey == 614 && (
+              <span className="">Spruce</span>
+            )}</strong></h3>
           </div>
         </div>
         <ArrowUpRight

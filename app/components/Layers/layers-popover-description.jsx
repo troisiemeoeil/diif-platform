@@ -29,7 +29,7 @@ export function LayersPopoverDescription({ title, imageUrl, content, legend }) {
                     <img
                         alt="legend"
                         src={legend}
-                        className="object-cover rounded-t-xl mt-2"
+                        className="object-cover  mt-2"
                     />
                 ) : null}
             </CardHeader>
@@ -53,7 +53,7 @@ export default function StylePopoverDescription({title, legendUrl}) {
                     <img
                         alt="legend"
                         src={legendUrl}
-                        className="object-cover rounded-t-xl mt-2"
+                        className="object-cover  mt-2"
                     />
                 ) : null}
             </CardHeader>

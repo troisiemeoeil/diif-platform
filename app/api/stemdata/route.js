@@ -7,7 +7,7 @@ export async function GET(req) {
         console.log("query: " , stemKey, typeof(stemKey));
         
         if (!stemKey) {
-            return Response.json({ error: "stemKey is required" }, { status: 400 });
+            return Response.json({ error: "stem key is required" }, { status: 400 });
         }
 
         const client = await clientPromise;

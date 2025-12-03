@@ -53,6 +53,8 @@ export default function Details() {
   const setSheetOpen = useAppStore((s) => s.setSheetOpen);
   const stemKey = useAppStore((s) => s.stemKey);
   const [stemDetails, setStemDetails] = useState(null);
+
+  
   useEffect(() => {
     if (!sheetOpen) return;
 
@@ -73,7 +75,7 @@ export default function Details() {
 
   const stemInfoRaw = stemDetails;
 
-  const { Logs, _id, Altitude, StemKey, SubObjectKey, ...filteredStemInfo } = stemInfoRaw;
+  const { Logs, _id, Altitude, StemKey, SubObjectKey, ObjectKey, ...filteredStemInfo } = stemInfoRaw;
 
 
   const transformedData = Object.entries(filteredStemInfo).map(([key, value]) => ({
@@ -85,7 +87,7 @@ export default function Details() {
 
   return (
     <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
-      <DialogContent className="">
+      <DialogContent className="max-w-fit">
         <DialogHeader>
           <DialogTitle>Detailed Information</DialogTitle>
           <DialogDescription>Stem Key: {stemKey}</DialogDescription>
@@ -98,7 +100,7 @@ export default function Details() {
           </TabsList>
 
           {/* Stem Info Tab */}
-          <TabsContent value="stemInfo" className="w-[50vw] flex items-start gap-8">
+          <TabsContent value="stemInfo" className="w-[50vw] flex items-start gap-8 max-h-[60vh] ">
             <Table>
               <TableHeader>
                 <TableRow className="text-center">
@@ -124,7 +126,7 @@ export default function Details() {
           </TabsContent>
 
           {/* Logs Tab */}
-          <TabsContent value="logs" className="w-[65vw]  flex mt-2 gap-2" >
+          <TabsContent value="logs" className="w-[65vw] flex mt-2 gap-2 max-h-[60vh] overflow-y-auto scrollbar-hide ">
             <StemLogsTable stemDetails={stemDetails} />
             <div className="w-[70vw]  min-h-[40vh] rounded-3xl">
               <h1 className="text-sm font-bold text-black">3D Model</h1>
@@ -156,8 +158,6 @@ export function StemLogsTable({ stemDetails }) {
 
   async function handleTrack(log) {
     console.log(log);
-
-
     const inputValues = {
       LogLength: log.LogMeasurement?.LogLength,
       TopOb: log.LogMeasurement?.TopOb,
@@ -188,7 +188,7 @@ export function StemLogsTable({ stemDetails }) {
   }
 
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible className="w-full h-full overflow-y-scroll scrollbar-hide">
       {logs.map((log) => {
 
         // Flatten the log object for display in the table
@@ -221,11 +221,10 @@ export function StemLogsTable({ stemDetails }) {
                     ))}
                   </TableBody>
                 </Table>
-                <Button className="w-full my-5 hover:bg-red-700 cursor-pointer" onClick={() => handleTrack(log)}>Track</Button>
-
+                <Button className="w-full my-5 hover:bg-red-700 cursor-pointer"
+                  onClick={() => handleTrack(log)}>Track</Button>
               </div>
             </AccordionContent>
-
           </AccordionItem>
         );
       })}

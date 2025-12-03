@@ -2,7 +2,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ... other configurations
-
+  transpilePackages: ['@mui/x-charts-vendor'],
   images: {
     remotePatterns: [
       {

@@ -123,31 +123,67 @@ export function LayerContentSidebar({
     {
       id: "layer3",
       name: "Unstable Slopes",
-      url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Angränsande_slänter_med_kraftig_lutning37685&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+      url: "",
       image: "/stronglandslide.png",
       country: "Sweden",
       description: "Map layer from the Swedish Forest Agency (Skogsstyrelsen) identifying areas with a high risk of landslides and unstable slopes (Ras- och skredrisk). This is critical information for forestry planning to avoid activities that could trigger erosion or endanger personnel/infrastructure.",
-      legendUrl: "https://kartta.luke.fi/geoserver/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk"
+      legendUrl: "https://kartta.luke.fi/geoserver/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk",
+      style: [
+        {
+          title: "Angränsande slänter med kraftig Lutning",
+          url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Angränsande_slänter_med_kraftig_lutning37685&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Angränsande_slänter_med_kraftig_lutning37685"
+        },
+
+        {
+          title: "Slänter - Område som kan påverkas vid ras",
+          url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Slänter_-_Område_som_kan_påverkas_vid_ras19409&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Slänter_-_Område_som_kan_påverkas_vid_ras19409"
+        },
+
+
+        
+        {
+          title: "Möjlig Ravinformation",
+          url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Ravinformation_-_Möjlig_ravinformation56819&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Ravinformation_-_Möjlig_ravinformation56819"
+        },
+      ]
 
     },
     {
       id: "layer4",
       name: "Watercourses & rivers",
-      url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Ravinformation_-_Vattendrag_i_anslutning31827&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+      url: "",
       image: "/watercourse.png",
       country: "Sweden",
       description: "Geographic data from the Swedish Forest Agency (Skogsstyrelsen) showing water bodies, rivers, and stream channels. This layer is used to guide forest management practices near watercourses, protecting water quality, aquatic environments, and riparian zones.",
-      legendUrl: "https://kartta.luke.fi/geoserver/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk"
+      legendUrl: "https://kartta.luke.fi/geoserver/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Climforisk%3ADrought_risk",
+      style: [
+        {
+          title: "Watercourses & rivers",
+          url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Ravinformation_-_Vattendrag_i_anslutning31827&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaRasoskred/MapServer/WMSServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Ravinformation_-_Vattendrag_i_anslutning31827"
 
+        },
+      ]
     },
     {
       id: "layer5",
       name: "Harvesting Plan",
-      url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaAvverkningsanmalan/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Avverkningsanmalan_Skogsstyrelsen&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+      url: "",
       image: "/harvestingplan.png",
       country: "Sweden",
-      description: "A map layer showing submitted and registered Avverkningsanmälan (Harvesting Notifications/Plans) for final felling on productive forest land, managed by the Swedish Forest Agency (Skogsstyrelsen). \r\n  It indicates the planned locations for future major harvesting operations."
-      , legendUrl: ""
+      description: "A map layer showing submitted and registered Avverkningsanmälan (Harvesting Notifications/Plans) for final felling on productive forest land, managed by the Swedish Forest Agency (Skogsstyrelsen). \r\n  It indicates the planned locations for future major harvesting operations.",
+      legendUrl: "",
+      style: [
+        {
+          title: "Avverkningsanmalan Skogsstyrelsen",
+          url: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaAvverkningsanmalan/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=Avverkningsanmalan_Skogsstyrelsen&STYLES=&FORMAT=image/png&TRANSPARENT=TRUE&WIDTH=256&HEIGHT=256&CRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://geodpags.skogsstyrelsen.se/arcgis/services/Geodataportal/GeodataportalVisaAvverkningsanmalan/MapServer/WMSServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Avverkningsanmalan_Skogsstyrelsen"
+
+        },
+      ]
     },
     {
       id: "layer6",
@@ -215,12 +251,12 @@ export function LayerContentSidebar({
           url: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WMSServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Kallionpinnan_taso54480&STYLES=&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256",
           legendUrl: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=Kallionpinnan_taso54480"
         },
-         {
+        {
           title: "Soil Types ",
           url: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WMSServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=maapera_200k_maalajit&STYLES=default&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256",
           legendUrl: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=maapera_200k_maalajit"
         },
-         {
+        {
           title: "Soil Surface Species ",
           url: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WMSServer?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=maapera_20k_pintamaalajit&STYLES=&FORMAT=image/png&TRANSPARENT=true&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256",
           legendUrl: "https://gtkdata.gtk.fi/arcgis/services/Rajapinnat/GTK_Maapera_WMS/MapServer/WmsServer?request=GetLegendGraphic%26version=1.3.0%26format=image/png%26layer=maapera_20k_pintamaalajit"
@@ -358,21 +394,46 @@ export function LayerContentSidebar({
   useEffect(() => {
     if (!map) return;
 
-    const allLayerIds = ['3d-ply-layer', 'layer1', 'layer2', 'layer3', 'layer4', 'layer5', "layer6", "layer7"];
+    // Define the function that manipulates the layers
+    const setLayerVisibility = () => {
+      const allLayerIds = [
+        '3d-ply-layer',
+        'layer1',
+        'layer2',
+        'layer3',
+        'layer4',
+        'layer5',
+        'layer6',
+        'layer7',
+      ];
 
-    allLayerIds.forEach((layerId) => {
-      if (!map.getLayer(layerId)) return;
+      allLayerIds.forEach((layerId) => {
+        const layerStyles = activeStyleIds[layerId] || [];
+        const hasStyleOptions = wmsLayers.some(
+          (l) => l.id === layerId && l.style
+        );
 
-      const layerStyles = activeStyleIds[layerId] || [];
-      const hasActiveStyles = layerStyles.length > 0;
+        const visibility = hasStyleOptions
+          ? 'none'
+          : activeLayerIds.includes(layerId)
+            ? 'visible'
+            : 'none';
 
-      const hasStyleOptions = wmsLayers.some(l => l.id === layerId && l.style);
-      const visibility = hasStyleOptions
-        ? 'none'
-        : (activeLayerIds.includes(layerId) ? 'visible' : 'none');
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, 'visibility', visibility);
+        }
+      });
+    };
 
-      map.setLayoutProperty(layerId, 'visibility', visibility);
-    });
+    map.on('style.load', setLayerVisibility);
+
+    if (map.isStyleLoaded()) {
+      setLayerVisibility();
+    }
+    return () => {
+      map.off('style.load', setLayerVisibility);
+    };
+
   }, [activeLayerIds, activeStyleIds, map, wmsLayers]);
 
   useEffect(() => {
@@ -459,7 +520,7 @@ export function LayerContentSidebar({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Map Layers</SidebarGroupLabel>
       <SidebarMenu>
         <Collapsible
           key="layers"
@@ -467,14 +528,7 @@ export function LayerContentSidebar({
           defaultOpen="layer1"
           className="group/collapsible">
           <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip="Layers">
-                <Layers />
-                <span>Layers</span>
-                <ChevronRight
-                  className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
+
             <CollapsibleContent>
               <SidebarMenuSub>
                 {country && wmsLayers

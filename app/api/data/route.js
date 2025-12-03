@@ -48,8 +48,6 @@ export async function GET(request) {
         );
     }
     
-    // --- Server-Side Filtering, Sorting, and Pagination Logic ---
-
     // 1. Column Filtering
     const parsedColumnFilters = JSON.parse(filters || '[]') ; 
     if (parsedColumnFilters?.length) {
