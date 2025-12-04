@@ -20,10 +20,10 @@ import { useMemo } from "react"
 export const description = "A donut chart with text"
 
 const SPECIES_LABELS = {
-    "613": "Pine (Mänty)",
-    "614": "Spruce (Kuusi)",
-    "615": "Birch (Koivu)",
-    "616": "Other broadleaves (Muut lehtipuut)",
+    "613": "Pine",
+    "614": "Spruce",
+    "615": "Birch",
+    "616": "Other broadleaves",
 }
 
 const SPECIES_COLORS = {
@@ -47,8 +47,8 @@ export function TotalNumberStem({stemValue}) {
     }, [stemValue])
     
     return (
-        <Card className="w-full h-full flex flex-col  p-2">
-            <CardHeader className="items-center pb-0 pt-2">
+        <Card className="flex flex-col w-[35%] items-center  p-2">
+            <CardHeader className="w-full pb-0 pt-2">
                 <CardTitle>Total number of Stems</CardTitle>
                 <CardDescription className="w-full text-[12px]">Categorized Number of Stems </CardDescription>
             </CardHeader>

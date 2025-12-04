@@ -9,11 +9,12 @@ import { AverageVolume } from "./averageVolume"
 import { useAppStore } from "@/lib/state/store";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { AverageStemLength } from "./averageStemLength";
 
 
 export function SummaryHPR() {
     const country = useAppStore((s) => s.country);
- 
+
     const [stemCount, setStemCount] = useState(null)
     useEffect(() => {
         if (country !== "Finland") {
@@ -26,8 +27,8 @@ export function SummaryHPR() {
             try {
                 const response = await axios.get("/api/stemdata/number-of-stem");
                 if (!cancelled) {
-                setStemCount(response.data)
-                
+                    setStemCount(response.data)
+
                 }
             } catch (error) {
                 console.error("Failed to fetch stem data", error);
@@ -40,14 +41,9 @@ export function SummaryHPR() {
         };
     }, [country]);
 
-             console.log(stemCount);
-
-
-    if (country !== "Finland") {
-        return <div></div>;
-    }
-
     return (
+
+
         <Accordion
             type="single"
             collapsible
@@ -55,17 +51,17 @@ export function SummaryHPR() {
         >
             <AccordionItem
                 value="item-1"
-                className="transition-[width] duration-300 ease-in-out w-[12vw] data-[state=open]:w-[35vw]"
+                className="transition-[width] duration-300 ease-in-out w-[12vw] data-[state=open]:w-[42vw]"
             >
                 <AccordionTrigger className="text-sm flex justify-between px-4 items-center font-sans font-semibold">
                     Quick Summary
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full p-2 gap-2 text-balance">
-                  {stemCount != null ? <TotalNumberStem stemValue={stemCount} /> : <div></div>}  
-                    <div className="flex flex-col w-full gap-2">
+                    {stemCount != null ? <TotalNumberStem stemValue={stemCount} /> : <div></div>}
+                    <div className="flex flex-col w-[60%] gap-2">
                         <AverageVolume stemValue={stemCount} />
+                        <AverageStemLength stemValue={stemCount} />
 
-                        {/* <AverageVolume /> */}
                     </div>
                 </AccordionContent>
             </AccordionItem>
