@@ -9,14 +9,32 @@ import {
 import CsvUploader from "../components/csv-uploader";
 import { Button } from "@/components/ui/button";
 import { useControlSawmillModal, useAppStore } from "@/lib/state/store";
-import { Axe, ChartLine, Database, Layers } from "lucide-react";
+import { AudioWaveform, Axe, ChartLine, Database, GalleryVerticalEnd, Layers } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { TeamSwitcher } from "@/components/sidebar/team-switcher";
 
+const data = {
+
+  teams: [
+    {
+      name: "DIIF (FIN)",
+      logo: GalleryVerticalEnd,
+      plan: "Finland",
+    },
+    {
+      name: "DIIF (SWE)",
+      logo: AudioWaveform,
+      plan: "Sweden",
+    },
+
+  ],
+}
 function HeaderContent({ children }) {
   const openState = useControlSawmillModal((s) => s.open);
   const setOpenState = useControlSawmillModal((s) => s.setOpenModal);
   const setSidebarState = useAppStore((s) => s.setSidebarState);
-
+  const selectedMenu = useAppStore((s) => s.selectedMenu);
+  const setselectedMenu = useAppStore((s) => s.setselectedMenu);
   const { toggleSidebar, state } = useSidebar()
 
   function handleModalTrigger() {
@@ -33,6 +51,19 @@ function HeaderContent({ children }) {
     setTimeout(() => {
       setOpenState(true);
     }, 300);
+
+  }
+
+  function handleMenuItemSideBar(menu) {
+    // collapse the sidebar only if it's currently expanded
+    setselectedMenu(menu)
+
+    if (state === "collapsed" && menu === menu) {
+      toggleSidebar();
+      setSidebarState(true);
+    }
+
+  
   }
   return (
     <SidebarInset>
@@ -41,28 +72,31 @@ function HeaderContent({ children }) {
         <div className="w-full flex items-center justify-between  gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  // onClick={}
-                  className="w-fit  z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer"><Layers /></Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Map Layers</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  // onClick={}
-                  className="w-fit  z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer"><ChartLine /></Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Map Layers</p>
-              </TooltipContent>
-            </Tooltip>
+          <TeamSwitcher teams={data.teams} />
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                onClick={() => handleMenuItemSideBar("Layers")}
+                className="w-fit  z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer"><Layers /></Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Map Layers</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                onClick={() => handleMenuItemSideBar("HPRAnalysis")}
+
+                className="w-fit  z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer"><ChartLine /></Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>HPR Analysis</p>
+            </TooltipContent>
+          </Tooltip>
           <div className="flex w-full items-center justify-end gap-2">
             <CsvUploader />
             <Tooltip>
@@ -89,7 +123,7 @@ function HeaderContent({ children }) {
 
 export default function Page({ children }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <HeaderContent>{children}</HeaderContent>
     </SidebarProvider>

@@ -27,7 +27,6 @@ import { useAppStore } from "@/lib/state/store";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH = "21rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
@@ -43,6 +42,7 @@ function useSidebar() {
   return context
 }
 
+
 function SidebarProvider({
   defaultOpen = true,
   open: openProp,
@@ -55,6 +55,16 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
+  const selectedMenu = useAppStore((s) => s.selectedMenu)
+let SIDEBAR_WIDTH = "0"
+
+if (selectedMenu === "Layers") {
+   SIDEBAR_WIDTH = "21rem"
+}
+else if (selectedMenu === "HPRAnalysis") {
+   SIDEBAR_WIDTH = "45vw"
+
+}
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = React.useState(defaultOpen)

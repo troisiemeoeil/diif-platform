@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/sidebar"
 import { LayerContentSidebar } from "./layer-content-sidebar"
 import { useEffect } from "react"
+import { useAppStore } from "@/lib/state/store"
+import Layout from "@/app/components/data/DetailedAnalysis/layout"
 
 // This is sample data.
 const data = {
@@ -158,21 +160,28 @@ export function AppSidebar({
   ...props
 }) {
 
+  const selectedMenu = useAppStore((s) => s.selectedMenu)
+
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
+    <Sidebar collapsible="offcanvas" {...props}>
+
       <SidebarContent>
-        <LayerContentSidebar items={data.navMain} />
+        {selectedMenu === "Layers" ? (
+          <LayerContentSidebar items={data.navMain} />
+        ) : selectedMenu === "HPRAnalysis" ? (
+           <Layout />
+        ) : (
+
+          <></>
+        )}
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
-      <SidebarFooter>
+      {/* <SidebarFooter className="flex justify-end ">
         <NavUser user={data.user} />
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
-    
+
   );
 }

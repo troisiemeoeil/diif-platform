@@ -41,6 +41,9 @@ export function SummaryHPR() {
         };
     }, [country]);
 
+
+    if (country != "Finland") return null
+
     return (
 
 
