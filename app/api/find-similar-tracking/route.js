@@ -4,35 +4,27 @@ const findSimilar = async (input) => {
     const { length, vtop } = input;
     const inputLength = length;
     const inputVTopD = vtop;
-
+ //equation : Similarity Score = (Length diff)^2 + (Diameter diff )^2
     const pipeline = [
-        // Stage 1: Deconstruct the Logs array into individual documents
         {
             $unwind: "$Logs"
         },
-        // Stage 2: Calculate the similarity score for each individual log
         {
             $addFields: {
                 similarityScore: {
                     $add: [
-                        // --- LENGTH (DB cm -> mm) ---
                         {
                             $pow: [{
                                 $subtract: [
-                                    // Convert DB LogLength from cm to mm
                                     { $multiply: [{$toDouble:  "$Logs.LogMeasurement.LogLength" } , 10] },
-                                    // Input is already in mm
                              inputLength 
                                 ]
                             }, 2]
                         },
-                        // --- TOP DIAMETER (Input 0.1 mm -> mm) ---
                         {
                             $pow: [{
                                 $subtract: [
-                                    // DB TopOb is already in mm
                                    {$toDouble: "$Logs.LogMeasurement.TopOb" },
-                                    // Convert Input VTopD from 0.1 mm to mm
                                     { $divide: [ inputVTopD, 10] }
                                 ]
                             }, 2]
@@ -41,30 +33,25 @@ const findSimilar = async (input) => {
                 }
             }
         },
-        // --- REMOVED THE GROUPING LOGIC THAT CAUSED THE ISSUE ---
-        // The $group, second $unwind, and $match stages were here.
-        // By removing them, we now sort all logs, not just the best log from each stem.
+       
 
-        // Stage 3: Sort all logs by their similarity score in ascending order
         {
             $sort: {
-                similarityScore: 1 // Sort by the score of each log
+                similarityScore: 1 
             }
         },
-        // Stage 4: Limit to the top 5 best matches
         {
             $limit: 5
         },
-        // Stage 5: Project the final fields
         {
             $project: {
                 _id: 0,
-                StemKey: "$StemKey", // Keep the original StemKey
-                similarityScore: 1,  // The score for this specific log
+                StemKey: "$StemKey", 
+                similarityScore: 1,  
                 StemNumber: "$StemNumber",
                 Latitude: "$Latitude",
                 Longitude: "$Longitude",
-                MatchingLog: "$Logs", // The entire log object that matched
+                MatchingLog: "$Logs",
             }
         }
     ];

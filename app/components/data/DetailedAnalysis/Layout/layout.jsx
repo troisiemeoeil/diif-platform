@@ -19,8 +19,8 @@ export default function Layout() {
             <TabsContent value="log-product">Log Product and Volume Analysis.</TabsContent>
             <TabsContent value="stem-quality">Stem Quality and Measurement Analysis.</TabsContent>
             <TabsContent value="stem-identification">Stem Identification and Location Analysis.</TabsContent>
-            <TabsContent value="stand-quality">Stand Quality & Taper Analysis Analysis.</TabsContent>
-            <TabsContent value="operational">Operational Performance Analysis Analysis.</TabsContent>
+            <TabsContent value="stand-quality">Stand Quality & Taper Analysis.</TabsContent>
+            <TabsContent value="operational">Operational Performance Analysis.</TabsContent>
         </Tabs>
     )
 }

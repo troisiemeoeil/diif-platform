@@ -22,7 +22,7 @@ import { useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import * as THREE from 'three';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
-import { Switch } from "../ui/switch";
+import { Switch } from "../../../components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import StylePopoverDescription, { LayersPopoverDescription } from "@/app/components/Layers/layers-popover-description";
 

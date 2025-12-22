@@ -7,24 +7,24 @@ const findMatchingSawmillLogs = async (harvestLog) => {
       $addFields: {
         similarityScore: {
           $add: [
-            // --- LENGTH (Input cm -> mm) ---
+
             {
               $pow: [{
                 $subtract: [
-                  // DB Length is already in mm
+
                   { $toDouble: "$Length" },
-                  // Convert Input LogLength from cm to mm
+
                   { $multiply: [{ $toDouble: LogLength }, 10] }
                 ]
               }, 2]
             },
-            // --- TOP DIAMETER (DB 0.1 mm -> mm) ---
+
             {
               $pow: [{
                 $subtract: [
-                  // Convert DB TRgRvc from 0.1 mm to mm
+
                   { $divide: [{ $toDouble: "$TRgRvc" }, 10] },
-                  // Input TopOb is already in mm
+
                   { $toDouble: TopOb }
                 ]
               }, 2]

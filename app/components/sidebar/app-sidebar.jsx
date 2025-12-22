@@ -14,10 +14,10 @@ import {
   SquareTerminal,
 } from "lucide-react"
 
-import { NavMain } from "@/components/sidebar/nav-main"
-import { NavProjects } from "@/components/sidebar/nav-projects"
-import { NavUser } from "@/components/sidebar/nav-user"
-import { TeamSwitcher } from "@/components/sidebar/team-switcher"
+import { NavMain } from "@/app/components/sidebar/nav-main"
+import { NavProjects } from "@/app/components/sidebar/nav-projects"
+import { NavUser } from "@/app/components/sidebar/nav-user"
+import { TeamSwitcher } from "@/app/components/sidebar/team-switcher"
 import {
   Sidebar,
   SidebarContent,
@@ -28,7 +28,7 @@ import {
 import { LayerContentSidebar } from "./layer-content-sidebar"
 import { useEffect } from "react"
 import { useAppStore } from "@/lib/state/store"
-import Layout from "@/app/components/data/DetailedAnalysis/layout"
+import Layout from "@/app/components/data/DetailedAnalysis/Layout/layout"
 
 // This is sample data.
 const data = {

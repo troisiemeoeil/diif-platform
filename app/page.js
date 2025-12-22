@@ -4,7 +4,7 @@ import MapProvider from "@/lib/mapbox/provider";
 import { useRef, useState } from "react";
 import MapStyles from "./components/map/map-styles";
 import MapControls from "./components/map/map-controls";
-import Page from "./dashboard/HeaderContent";
+import Page from "./components/header/HeaderContent";
 import Layers from "./components/Layers/layers";
 import Sawmilldetails from "./components/data/sawmilldetails";
 import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
@@ -24,10 +24,7 @@ export default function Home() {
             latitude: 0,
             zoom: 2,
           }}
-
         >
-
-
           <Page mapContainerRef={mapContainerRef} >
 
             <div

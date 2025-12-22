@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import { AppSidebar } from "@/app/components/sidebar/app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -6,12 +6,12 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
-import CsvUploader from "../components/csv-uploader";
+import CsvUploader from "../csv-uploader";
 import { Button } from "@/components/ui/button";
 import { useControlSawmillModal, useAppStore } from "@/lib/state/store";
 import { AudioWaveform, Axe, ChartLine, Database, GalleryVerticalEnd, Layers } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { TeamSwitcher } from "@/components/sidebar/team-switcher";
+import { TeamSwitcher } from "@/app/components/sidebar/team-switcher";
 
 const data = {
 
