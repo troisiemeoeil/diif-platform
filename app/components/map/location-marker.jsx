@@ -1,6 +1,6 @@
 
 import { MapPin } from "lucide-react";
-import Marker from "./map/map-marker";
+import Marker from "./map-marker";
 
 
 export function LocationMarker({ location, onHover }) {

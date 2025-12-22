@@ -115,7 +115,7 @@ const Example = () => {
     }
 
     try {
-      const response = await fetch('/api/data', {
+      const response = await fetch('/api/sawmill-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rowIds: Object.keys(rowSelection) }),
@@ -144,7 +144,7 @@ const Example = () => {
 
 
 
-      const url = new URL('/api/data', location.origin);
+      const url = new URL('/api/sawmill-data', location.origin);
       url.searchParams.set(
         'start',
         `${pagination.pageIndex * pagination.pageSize}`,

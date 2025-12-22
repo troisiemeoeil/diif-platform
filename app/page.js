@@ -5,9 +5,7 @@ import { useRef, useState } from "react";
 import MapStyles from "./components/map/map-styles";
 import MapControls from "./components/map/map-controls";
 import Page from "./components/header/HeaderContent";
-import Layers from "./components/Layers/layers";
 import Sawmilldetails from "./components/data/sawmilldetails";
-import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
 import { useAppStore } from "@/lib/state/store";
 import { SummaryHPR } from "./components/data/summary-hpr/summaryHpr";
 

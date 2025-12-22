@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 import {
   iconMap
 } from "@/lib/mapbox/utils";
-import { LocationMarker } from "../location-marker";
-import { LocationPopup } from "../location-popup";
+import { LocationMarker } from "./location-marker";
+import { LocationPopup } from "./location-popup";
 
 export default function MapSearch() {
   const { map } = useMap();

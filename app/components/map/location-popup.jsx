@@ -9,7 +9,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-import Popup from "./map/map-popup";
+import Popup from "./map-popup";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";

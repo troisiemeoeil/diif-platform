@@ -29,7 +29,7 @@ export async function GET() {
     const results = await collection.aggregate(stemCountingPipeline).toArray();
     const totalCount = results.reduce((sum, item) => sum + (item.count || 0), 0);
 
-    // --- Aggregation Pipeline for Overall Log Volume Average (This pipeline still needs $unwind) ---
+    
     const overallAvgPipeline = [
       { $unwind: "$Logs" },
       {
