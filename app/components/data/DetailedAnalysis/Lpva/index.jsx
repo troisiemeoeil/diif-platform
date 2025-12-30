@@ -38,7 +38,7 @@ export function Lpva() {
     return (
         <Card className="w-full py-6">
             <CardHeader className="flex  justify-center">
-                <CardTitle className="text-2xl font-bold"> Log Product and Volume Analysis.</CardTitle>
+                <CardTitle className="text-2xl font-bold"> Log  Volume Analysis.</CardTitle>
 
             </CardHeader>
             <CardContent>
