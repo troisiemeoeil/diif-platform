@@ -3,9 +3,6 @@
 const nextConfig = {
   // ... other configurations
   transpilePackages: ['@mui/x-charts-vendor'],
-  experimental: {
-    turbo: false
-  },
   images: {
     remotePatterns: [
       {
