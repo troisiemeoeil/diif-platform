@@ -62,7 +62,6 @@ export async function GET() {
                 speciesKey,
                 speciesName: SPECIES_LABELS[speciesKey] || "Unknown",
                 totalSpeciesVolume: group.totalSpeciesVolume,
-                // If Spruce, attach the buckets. Otherwise, attach the individual stems.
                 stems: speciesKey === "614" ? [] : group.stems,
                 averagedBuckets: speciesKey === "614" ? raw.spruceAverages : []
             };

@@ -38,23 +38,19 @@ export function LogVolumePerStem() {
         const selectedGroup = data.find((g) => g.speciesKey === activeSpecies);
         if (!selectedGroup) return [];
 
-        // SPECIAL CASE: Spruce (614) - Use the averaged data from your API
         if (activeSpecies === "614") {
             return selectedGroup.averagedBuckets.map((bucket) => ({
-                // "Bucket 1 (1-100)", "Bucket 2 (101-200)", etc.
                 label: `Group ${bucket._id + 1}`,
                 volume: bucket.averageVolume,
             }));
         }
 
-        // DEFAULT: Map individual stems for other species
         return selectedGroup.stems.map((stem, index) => ({
             label: index + 1,
             volume: stem.volumeSob,
         }));
     }, [data, activeSpecies]);
 
-    // 3. Generate dynamic config for the chart colors/labels
     const chartConfig = React.useMemo(() => {
         const config = {
             volume: { label: "Volume (Sob)" },
@@ -71,11 +67,10 @@ export function LogVolumePerStem() {
     if (data.length === 0) return <div>Loading harvest data...</div>
 
     return (
-        <Card className="py-4 sm:py-0">
-            <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
+        <Card className="py-4 sm:py-0 border-0 shadow-transparent">
+            <CardHeader className="flex flex-col items-stretch border-b p-0 sm:flex-row">
                 <div className="flex flex-1 flex-col justify-center gap-1 px-6 pb-3 sm:pb-0">
                     <CardTitle>Stem Volume Analysis</CardTitle>
-
                 </div>
                 <div className="flex overflow-x-auto">
                     {data.map((group) => (
@@ -96,7 +91,7 @@ export function LogVolumePerStem() {
                     ))}
                 </div>
             </CardHeader>
-            <CardContent className="px-2 sm:p-6">
+            <CardContent className="px-2 sm:p-6 b-0">
                 <ChartContainer
                     config={chartConfig}
                     className="aspect-auto h-[300px] w-full"

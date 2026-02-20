@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+
 import {
     Card,
     CardAction,
@@ -8,12 +8,16 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { TotalLogsVolume } from "./totalLogsVolumePerSpecies"
 import { LogVolumePerStem } from "./LogVolumePerStem"
+import { CircleQuestionMark } from "lucide-react"
 export function Lpva() {
     const [totalVolume, setTotalVolume] = useState(null)
     useEffect(() => {
@@ -37,21 +41,26 @@ export function Lpva() {
     }, [])
     return (
         <Card className="w-full py-6">
-            <CardHeader className="flex  justify-center">
-                <CardTitle className="text-2xl font-bold"> Log  Volume Analysis.</CardTitle>
-
+            <CardHeader className="flex  justify-center items-center">
+                <CardTitle className="text-2xl font-bold">Log Volume Analysis</CardTitle>
+                <Tooltip>
+                    <TooltipTrigger>
+                        <CircleQuestionMark size={15} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Calculating the total and moving average of volume produced per species.</p>
+                    </TooltipContent>
+                </Tooltip>
             </CardHeader>
             <CardContent>
-
                 <div className="flex flex-col gap-4">
-                    <div className="grid gap-2">
+                    {/* <div className="grid gap-2">
                         {
                             totalVolume && (
-
                                 <TotalLogsVolume totalVolume={totalVolume} />
                             )
                         }
-                    </div>
+                    </div> */}
                     <div className="grid gap-2">
                         <LogVolumePerStem />
 
@@ -60,7 +69,7 @@ export function Lpva() {
 
             </CardContent>
             <CardFooter className="flex-col gap-2">
-            
+
             </CardFooter>
         </Card>
     )
