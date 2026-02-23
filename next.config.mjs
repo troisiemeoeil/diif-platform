@@ -11,11 +11,7 @@ const nextConfig = {
       },
     ],
   },
-  // Explicitly disable Turbopack for Azure App Service compatibility
-  experimental: {
-    turbopack: false,
-  },
-
+  // Let webpack handle CSS/PostCSS instead of Turbopack
   webpack: (config, { dev }) => {
     if (!dev) {
       config.cache = false;
