@@ -1,4 +1,4 @@
-import clientPromise from "@/lib/db/mongodb";
+import getMongoConnection from "@/lib/db/mongodb";
 
 const findSimilar = async (input) => {
     const { length, vtop } = input;
@@ -57,7 +57,7 @@ const findSimilar = async (input) => {
     ];
 
     try {
-        const client = await clientPromise;
+        const client = await getMongoConnection();
         const db = client.db("harvesting-data");
         const collection = db.collection("harvesting-data");
         const results = await collection.aggregate(pipeline).toArray();

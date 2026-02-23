@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 // 🎯 Using the actual import for clientPromise as requested
-import clientPromise from "@/lib/db/mongodb";
+import getMongoConnection from "@/lib/db/mongodb";
 import { ObjectId } from 'mongodb';
 
 export async function GET(request) {
@@ -20,7 +20,7 @@ export async function GET(request) {
     let dbData = [];
 
     try {
-        const client = await clientPromise;
+        const client = await getMongoConnection();
         const db = client.db("sawmill");
         const collection = db.collection("data");
         const document = await collection.find({}).toArray();
@@ -106,7 +106,7 @@ export async function POST(request) {
             return NextResponse.json({ error: 'rowIds are required' }, { status: 400 });
         }
 
-        const client = await clientPromise;
+        const client = await getMongoConnection();
         const db = client.db("sawmill");
         const collection = db.collection("data");
 

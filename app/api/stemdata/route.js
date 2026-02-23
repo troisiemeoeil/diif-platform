@@ -1,4 +1,4 @@
-import clientPromise from "@/lib/db/mongodb";
+import getMongoConnection from "@/lib/db/mongodb";
 
 export async function GET(req) {
     try {
@@ -10,7 +10,7 @@ export async function GET(req) {
             return Response.json({ error: "stem key is required" }, { status: 400 });
         }
 
-        const client = await clientPromise;
+        const client = await getMongoConnection();
         const db = client.db("harvesting-data");
         const collection = db.collection("harvesting-data");
 

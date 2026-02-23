@@ -1,8 +1,8 @@
-import clientPromise from "@/lib/db/mongodb";
+import getMongoConnection from "@/lib/db/mongodb";
 
 export async function GET() {
   try {
-    const client = await clientPromise;
+    const client = await getMongoConnection();
     const db = client.db("harvesting-data");
     const collection = db.collection("harvesting-data");
 

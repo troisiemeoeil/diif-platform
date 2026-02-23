@@ -1,4 +1,4 @@
-import clientPromise from "@/lib/db/mongodb";
+import getMongoConnection from "@/lib/db/mongodb";
 
 const findMatchingSawmillLogs = async (harvestLog) => {
   const { LogLength, TopOb } = harvestLog;
@@ -53,7 +53,7 @@ const findMatchingSawmillLogs = async (harvestLog) => {
   ];
 
   try {
-    const client = await clientPromise;
+    const client = await getMongoConnection();
     const db = client.db("sawmill");
     const collection = db.collection("data");
 
