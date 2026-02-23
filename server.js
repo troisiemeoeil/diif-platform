@@ -6,12 +6,15 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+// Azure App Service uses PORT environment variable
+const port = process.env.PORT || process.env.WEBSITES_PORT || 3000;
+
 app.prepare().then(() => {
   createServer((req, res) => {
     const parsedUrl = parse(req.url, true);
     handle(req, res, parsedUrl);
-  }).listen(process.env.PORT || 3000, (err) => {
+  }).listen(port, "0.0.0.0", (err) => {
     if (err) throw err;
-    console.log("> Ready on http://localhost:3000");
+    console.log(`> Ready on http://0.0.0.0:${port}`);
   });
 });
