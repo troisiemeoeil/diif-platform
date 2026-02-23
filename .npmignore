@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.git/
+.gitignore
+.eslintignore
+eslint.config.mjs
+*.md
+*.log
+.env.local
+.env.*.local

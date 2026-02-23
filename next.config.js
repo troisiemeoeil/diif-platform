@@ -1,7 +1,6 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ... other configurations
   transpilePackages: ['@mui/x-charts-vendor'],
   images: {
     remotePatterns: [
@@ -12,6 +11,16 @@ const nextConfig = {
         pathname: '/geoserver/**',
       },
     ],
+  },
+  // Disable Turbopack in production for Azure App Service compatibility
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      config.cache = false;
+    }
+    return config;
+  },
+  experimental: {
+    turbopack: false,
   },
 };
 
