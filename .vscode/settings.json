@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/68da6ca7-8b2f-4292-aa98-af8d0a433fa3/resourceGroups/TKI-DIIF/providers/Microsoft.Web/sites/diif-platform",
+    "appService.deploySubpath": "."
+}
