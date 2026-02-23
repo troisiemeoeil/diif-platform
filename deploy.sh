@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Azure deployment script for Node.js with Next.js
-# Install dependencies from scratch to avoid symlink issues
-npm ci --production=false
+set -e  # Exit on error
 
-# Build the application
+# Azure deployment script for Node.js with Next.js
+echo "Installing dependencies..."
+npm install --legacy-peer-deps
+
+echo "Building application..."
 npm run build
 
-# Set environment variable for production
-export NODE_ENV=production
+echo "Deployment complete!"
