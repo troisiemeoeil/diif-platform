@@ -6,28 +6,37 @@ const { execSync } = require("child_process");
 
 const port = process.env.PORT || process.env.WEBSITES_PORT || 3000;
 
-// Ensure node_modules exists, if not install dependencies
-const nodeModulesPath = path.join(__dirname, "node_modules");
-if (!fs.existsSync(nodeModulesPath)) {
-  console.log("node_modules not found, installing dependencies...");
-  try {
-    execSync("npm install --legacy-peer-deps", { stdio: "inherit" });
-  } catch (e) {
-    console.error("Failed to install dependencies:", e.message);
+async function startServer() {
+  // Ensure node_modules exists, if not install dependencies
+  const nodeModulesPath = path.join(__dirname, "node_modules");
+  if (!fs.existsSync(nodeModulesPath)) {
+    console.log("node_modules not found, installing dependencies...");
+    try {
+      execSync("npm install --legacy-peer-deps", { stdio: "inherit" });
+    } catch (e) {
+      console.error("Failed to install dependencies:", e.message);
+      process.exit(1);
+    }
   }
+
+  // Now require next after dependencies are installed
+  const dev = process.env.NODE_ENV !== "production";
+  const next = require("next");
+  const app = next({ dev });
+  const handle = app.getRequestHandler();
+
+  app.prepare().then(() => {
+    createServer((req, res) => {
+      const parsedUrl = parse(req.url, true);
+      handle(req, res, parsedUrl);
+    }).listen(port, "0.0.0.0", (err) => {
+      if (err) throw err;
+      console.log(`> Ready on http://0.0.0.0:${port}`);
+    });
+  });
 }
 
-const dev = process.env.NODE_ENV !== "production";
-const next = require("next");
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
-app.prepare().then(() => {
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(port, "0.0.0.0", (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://0.0.0.0:${port}`);
-  });
+startServer().catch((err) => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
 });
