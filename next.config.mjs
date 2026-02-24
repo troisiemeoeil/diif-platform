@@ -12,12 +12,12 @@ const nextConfig = {
     ],
   },
   // Let webpack handle CSS/PostCSS instead of Turbopack
-  webpack: (config, { dev }) => {
-    if (!dev) {
-      config.cache = false;
-    }
-    return config;
-  },
+  // webpack: (config, { dev }) => {
+  //   if (!dev) {
+  //     config.cache = false;
+  //   }
+  //   return config;
+  // },
 };
 
 export default nextConfig;
