@@ -1,17 +1,12 @@
 const { createServer } = require("http");
 const { parse } = require("url");
 const next = require("next");
-const path = require("path");
 
 const dev = process.env.NODE_ENV !== "production";
-const port = process.env.PORT || process.env.WEBSITES_PORT || 3000;
-
-// In production, use the built server. In dev, use Next.js dev server
-const app = next({ 
-  dev,
-  dir: dev ? __dirname : path.join(__dirname, ".next/standalone")
-});
+const app = next({ dev });
 const handle = app.getRequestHandler();
+
+const port = process.env.PORT || process.env.WEBSITES_PORT || 3000;
 
 app.prepare().then(() => {
   createServer((req, res) => {
