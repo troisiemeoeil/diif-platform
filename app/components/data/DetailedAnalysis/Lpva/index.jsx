@@ -42,12 +42,12 @@ export function Lpva() {
     return (
         <Card className="w-full py-6">
             <CardHeader className="flex  justify-center items-center">
-                <CardTitle className="text-2xl font-bold">Log Volume Analysis</CardTitle>
+                <CardTitle className="text-2xl font-bold">Logs Total & Volume Distribution Analysis</CardTitle>
                 <Tooltip>
                     <TooltipTrigger>
                         <CircleQuestionMark size={15} />
                     </TooltipTrigger>
-                    <TooltipContent>
+                    <TooltipContent side="bottom" sideOffset={1}>
                         <p>Calculating the total and moving average of volume produced per species.</p>
                     </TooltipContent>
                 </Tooltip>

@@ -15,8 +15,9 @@ function Sqm() {
                     <TooltipTrigger>
                         <CircleQuestionMark size={15} />
                     </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Measuring the </p>
+                    <TooltipContent side="bottom" sideOffset={10}>
+                        <p>Determine how the quality grade changes along the length of the stem.</p>
+                        <p>Comparison of DBH and Reference Diameter to indicate the overall health and growth of the stand.</p>
                     </TooltipContent>
                 </Tooltip>
             </CardHeader>

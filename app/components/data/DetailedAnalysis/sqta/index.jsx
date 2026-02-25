@@ -11,12 +11,13 @@ function Sqta() {
     <Card className="w-full py-6">
             <CardHeader className="flex  justify-center">
                 <CardTitle className="text-2xl font-bold">Stand Quality & Taper Analysis</CardTitle>
-                 <Tooltip>
-                    <TooltipTrigger>
+                 <Tooltip >
+                    <TooltipTrigger >
                         <CircleQuestionMark size={15} />
                     </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Calculating the total and moving average of volume produced per species.</p>
+                    <TooltipContent side="bottom" sideOffset={10}>
+                        <p>Plotting the distribution of DBH to Identify the Stand quality. </p>
+                        <p>Comparing DBH and Log Diamter values to determine taper rate.</p>
                     </TooltipContent>
                 </Tooltip>
             </CardHeader>

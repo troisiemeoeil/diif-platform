@@ -15,8 +15,8 @@ function Opa() {
                     <TooltipTrigger>
                         <CircleQuestionMark size={15} />
                     </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Calculating the total and moving average of volume produced per species.</p>
+                    <TooltipContent side="bottom" sideOffset={10}>
+                        <p>Measures operator efficiency by calculating the volume of wood processed per hour.</p>
                     </TooltipContent>
                 </Tooltip>
             </CardHeader>
