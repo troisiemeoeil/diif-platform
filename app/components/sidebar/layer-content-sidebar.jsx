@@ -203,23 +203,19 @@ export function LayerContentSidebar({
         },
         {
           title: "Kannot, kuusi, toteutunut hakkuukertymä",
-          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=bma%3Abiomass_121&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_121"
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=multi:forest_chip_stumps_spruce&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=multi:forest_chip_stumps_spruce"
         },
         {
           title: "Latvusmassa, lehtipuu, toteutunut hakkuukertymä",
-          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=bma%3Abiomass_127&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_127"
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=multi:forest_chip_logging_residues_broad_leaved_trees&STYLES=&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=multi:forest_chip_logging_residues_broad_leaved_trees"
         },
+     
         {
-          title: "Lehtipuut, kuorellinen runkopuu",
-          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=bma%3Abiomass_10&STYLES=bma:lehtip_latva&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=bma%3Abiomass_14"
-        },
-        {
-          title: "Biomass, deciduous trees, roundwood with bark 2019 (10 kg/ha)",
-          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MVMI:bm_lehtip_runkokuori_1519&STYLES=bm_lehtip_runkokuori_0610&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
-          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=MVMI%3Abm_lehtip_runkokuori_1519"
+          title: "Biomass, deciduous trees, roundwood with bark 2023 (10 kg/ha)",
+          url: "https://kartta.luke.fi/geoserver/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MVMI:bm_lehtip_runkokuori_1923&STYLES=bm_lehtip_runkokuori_0610&FORMAT=image/png&WIDTH=256&HEIGHT=256&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}",
+          legendUrl: "https://kartta.luke.fi/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image%2Fpng&width=20&height=20&layer=MVMI%3Abm_lehtip_runkokuori_1923"
         },
       ],
       image: "drought.png",
