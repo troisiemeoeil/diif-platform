@@ -12,6 +12,7 @@ import { useControlSawmillModal, useAppStore } from "@/lib/state/store";
 import { AudioWaveform, Axe, ChartLine, Database, GalleryVerticalEnd, Layers } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { TeamSwitcher } from "@/app/components/sidebar/team-switcher";
+import Link from "next/link";
 
 const data = {
 
@@ -97,6 +98,11 @@ function HeaderContent({ children }) {
               <p>HPR Analysis</p>
             </TooltipContent>
           </Tooltip>
+            <Link  href="/bi-dashboard">
+          <Button>
+            Analyze data
+          </Button>
+            </Link>
           <div className="flex w-full items-center justify-end gap-2">
             <CsvUploader />
             <Tooltip>

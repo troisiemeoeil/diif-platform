@@ -54,12 +54,12 @@ export function SummaryHPR() {
         >
             <AccordionItem
                 value="item-1"
-                className="transition-[width] duration-300 ease-in-out w-[12vw] data-[state=open]:w-[42vw]"
+                className="transition-[width] duration-300 ease-in-out "
             >
                 <AccordionTrigger className="text-sm flex justify-between px-4 items-center font-sans font-semibold">
-                    Quick Summary
+                     Summary
                 </AccordionTrigger>
-                <AccordionContent className="flex w-full p-2 gap-2 text-balance">
+                <AccordionContent className="flex w-full p-8 gap-2 text-balance">
                     {stemCount != null ? <TotalNumberStem stemValue={stemCount} /> : <div></div>}
                     <div className="flex flex-col w-[60%] gap-2">
                         <AverageVolume stemValue={stemCount} />

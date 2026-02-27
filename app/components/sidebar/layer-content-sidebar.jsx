@@ -474,9 +474,9 @@ export function LayerContentSidebar({
           const styleLayerId = `${layer.id}-style-${styleIdx}`;
           const isActive = (activeStyleIds[layer.id] || []).includes(styleIdx);
 
-          if (!isActive && map.getLayer(styleLayerId)) {
-            map.setLayoutProperty(styleLayerId, 'visibility', 'none');
-          }
+          // if (!isActive && map.getLayer(styleLayerId) != undefined) {
+          //   map.setLayoutProperty(styleLayerId, 'visibility', 'none');
+          // }
         });
       }
     });
