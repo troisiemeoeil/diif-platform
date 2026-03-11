@@ -474,9 +474,9 @@ export function LayerContentSidebar({
           const styleLayerId = `${layer.id}-style-${styleIdx}`;
           const isActive = (activeStyleIds[layer.id] || []).includes(styleIdx);
 
-          // if (!isActive && map.getLayer(styleLayerId) != undefined) {
-          //   map.setLayoutProperty(styleLayerId, 'visibility', 'none');
-          // }
+          if (!isActive && map.getLayer(styleLayerId) != undefined) {
+            map.setLayoutProperty(styleLayerId, 'visibility', 'none');
+          }
         });
       }
     });
@@ -545,13 +545,7 @@ export function LayerContentSidebar({
                                   <LayersPopoverDescription title={layer.name} imageUrl={layer.image} content={layer.description} legend={layer.legendUrl} />
                                 </PopoverContent>
                               </Popover>
-                              {/* 
-                              <Switch
-                                id={layer.id}
-                                checked={activeLayerIds.includes(layer.id)}
-                                onCheckedChange={(checked) => setLayerChecked(layer.id, checked)}
-                              /> */}
-
+                       
                               <button
                                 type="button"
                                 aria-expanded={openLayerIds.includes(layer.id)}
@@ -592,6 +586,11 @@ export function LayerContentSidebar({
                                       checked={(activeStyleIds[layer.id] || []).includes(idx)}
                                       onCheckedChange={(checked) => setStyleChecked(layer.id, idx, checked)}
                                     />
+                                       <Switch
+                            id="3d-ply-layer"
+                            checked={activeLayerIds.includes('3d-ply-layer')}
+                            onCheckedChange={(checked) => setLayerChecked('3d-ply-layer', checked)}
+                          />
                                   </div>
 
                                 </div>
