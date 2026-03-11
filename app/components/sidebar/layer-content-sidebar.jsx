@@ -506,7 +506,6 @@ export function LayerContentSidebar({
       return { ...prev, [layerId]: updatedStyles };
     });
 
-    // Ensure parent layer is active when a style is selected
     if (checked) {
       setActiveLayerIds((prev) => {
         return prev.includes(layerId) ? prev : [...prev, layerId];
@@ -586,11 +585,7 @@ export function LayerContentSidebar({
                                       checked={(activeStyleIds[layer.id] || []).includes(idx)}
                                       onCheckedChange={(checked) => setStyleChecked(layer.id, idx, checked)}
                                     />
-                                       <Switch
-                            id="3d-ply-layer"
-                            checked={activeLayerIds.includes('3d-ply-layer')}
-                            onCheckedChange={(checked) => setLayerChecked('3d-ply-layer', checked)}
-                          />
+                            
                                   </div>
 
                                 </div>
