@@ -2,10 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
+import Page from "../components/header/HeaderContent";
 
 export default function DashboardPage() {
   const chartRef = useRef(null);
-
+  const mapContainerRef = useRef(null)
  useEffect(() => {
   const loadChart = async () => {
     try {
@@ -24,7 +25,10 @@ export default function DashboardPage() {
 
       const chart = sdk.createDashboard({
         dashboardId: "e4c385eb-0986-44ae-9798-f1dc618c4eb0",
-        height: "800px",
+        height: "95%",
+        width: '95%',
+  
+
       });
 
       await chart.render(chartRef.current);
@@ -39,5 +43,12 @@ export default function DashboardPage() {
   
 }, []);
 
-  return <div ref={chartRef} />;
+  return (
+    <Page mapContainerRef={null}>
+      <div className="w-[95wh] h-[90vh] mt-6 flex ">
+      <div className="w-full h-full flex justify-center rounded" ref={chartRef} />
+      </div>
+    </Page>
+  )
+
 }

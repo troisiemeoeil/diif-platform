@@ -9,10 +9,11 @@ import {
 import CsvUploader from "../csv-uploader";
 import { Button } from "@/components/ui/button";
 import { useControlSawmillModal, useAppStore } from "@/lib/state/store";
-import { AudioWaveform, Axe, ChartLine, Database, GalleryVerticalEnd, Layers } from "lucide-react";
+import { AudioWaveform, Axe, ChartLine, ChartNoAxesCombined, Database, GalleryVerticalEnd, Home, Layers } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { TeamSwitcher } from "@/app/components/sidebar/team-switcher";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const data = {
 
@@ -31,6 +32,8 @@ const data = {
   ],
 }
 function HeaderContent({ children }) {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
   const openState = useControlSawmillModal((s) => s.open);
   const setOpenState = useControlSawmillModal((s) => s.setOpenModal);
   const setSidebarState = useAppStore((s) => s.setSidebarState);
@@ -64,58 +67,69 @@ function HeaderContent({ children }) {
       setSidebarState(true);
     }
 
-  
+
   }
   return (
     <SidebarInset>
       <header
         className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
         <div className="w-full flex items-center justify-between  gap-2 px-4">
-          <SidebarTrigger className="-ml-1" />
+          <SidebarTrigger className="-ml-1" disabled={!isHomePage} />
           <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-          <TeamSwitcher teams={data.teams} />
+          {isHomePage && <TeamSwitcher teams={data.teams} /> }
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button asChild className="cursor-pointer">
+                <Link href="/">
+                  <Home />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              Map View
+            </TooltipContent>
+          </Tooltip>
 
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant="outline"
                 onClick={() => handleMenuItemSideBar("Layers")}
-                className="w-fit  z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer"><Layers /></Button>
+                disabled={!isHomePage}
+                className="cursor-pointer"><Layers /></Button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Map Layers</p>
             </TooltipContent>
           </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                onClick={() => handleMenuItemSideBar("HPRAnalysis")}
 
-                className="w-fit  z-20 rounded-full border-0 bg-white text-black hover:cursor-pointer"><ChartLine /></Button>
+             <Tooltip>
+            <TooltipTrigger asChild>
+              <Button asChild className="cursor-pointer">
+                <Link href="/metsa-intelligence">
+                  <ChartNoAxesCombined />
+                </Link>
+              </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>HPR Analysis</p>
+              Analyze data
             </TooltipContent>
           </Tooltip>
-            <Link  href="/bi-dashboard">
-          <Button>
-            Analyze data
-          </Button>
-            </Link>
+
           <div className="flex w-full items-center justify-end gap-2">
-            <CsvUploader />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  onClick={handleModalTrigger}
-                  className="z-20 rounded-full  border-1 bg-white text-black hover:cursor-pointer"><Axe /></Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Open Sawmill Data</p>
-              </TooltipContent>
-            </Tooltip>
+            {isHomePage && <CsvUploader />}
+            {isHomePage && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={handleModalTrigger}
+                    className="z-20 rounded-full  border-1 bg-white text-black hover:cursor-pointer"><Axe /></Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Open Sawmill Data</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
 
           </div>
         </div>

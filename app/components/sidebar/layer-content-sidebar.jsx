@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronRight, CircleQuestionMark, Layers, Map, SquareTerminal } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import {
   Collapsible,
@@ -29,6 +30,13 @@ import StylePopoverDescription, { LayersPopoverDescription } from "@/app/compone
 export function LayerContentSidebar({
   items
 }) {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
+  // Early return if not on home page
+  if (!isHomePage) {
+    return null;
+  }
 
   const map = useAppStore((s) => s.map)
   const [activeLayerIds, setActiveLayerIds] = useState(['3d-ply-layer',]);
@@ -265,7 +273,10 @@ export function LayerContentSidebar({
 
 
   useEffect(() => {
-    if (!map) return;
+    if (!map) {
+      console.warn("Map object is undefined");
+      return;
+    }
 
     const addLayerIfNeeded = (layer) => {
       const { id, url, legendUrl } = layer;
@@ -469,13 +480,23 @@ export function LayerContentSidebar({
       }
 
       // Remove inactive style layers
-      if (layer.style) {
+      console.log(layer.style)
+      if (layer.style && map) {
         layer.style.forEach((_, styleIdx) => {
           const styleLayerId = `${layer.id}-style-${styleIdx}`;
           const isActive = (activeStyleIds[layer.id] || []).includes(styleIdx);
-
-          if (!isActive && map.getLayer(styleLayerId) != undefined) {
-            map.setLayoutProperty(styleLayerId, 'visibility', 'none');
+          
+          // Add guard to check if map and getLayer are available
+          if (map && typeof map.getLayer === 'function') {
+            try {
+              const layerExists = map.getLayer(styleLayerId);
+              console.log(layerExists);
+              if (!isActive && layerExists !== undefined) {
+                map.setLayoutProperty(styleLayerId, 'visibility', 'none');
+              }
+            } catch (error) {
+              console.warn(`Error accessing map layer ${styleLayerId}:`, error);
+            }
           }
         });
       }

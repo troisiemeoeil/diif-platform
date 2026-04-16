@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { usePathname } from "next/navigation"
 import {
   AudioWaveform,
   BookOpen,
@@ -159,17 +160,17 @@ const data = {
 export function AppSidebar({
   ...props
 }) {
-
+  const pathname = usePathname()
   const selectedMenu = useAppStore((s) => s.selectedMenu)
-
+  const isHomePage = pathname === '/'
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas" variant="inset" {...props}>
 
       <SidebarContent>
-        {selectedMenu === "Layers" ? (
+        {isHomePage && selectedMenu === "Layers" ? (
           <LayerContentSidebar items={data.navMain} />
-        ) : selectedMenu === "HPRAnalysis" ? (
+        ) : selectedMenu === "HPRAnalysis" && isHomePage ? (
            <Layout />
         ) : (
 
@@ -180,7 +181,7 @@ export function AppSidebar({
       {/* <SidebarFooter className="flex justify-end ">
         <NavUser user={data.user} />
       </SidebarFooter> */}
-      <SidebarRail />
+      {/* <SidebarRail /> */}
     </Sidebar>
 
   );
