@@ -53,7 +53,8 @@ export default function MapProvider({
       if (!map.current.getSource('diif')) {
         map.current.addSource('diif', {
           type: 'geojson',
-          data: '/GeoCoor.geojson',
+          // data: '/GeoCoor.geojson',
+          data: '/platform.geojson',
           promoteId: "StemKey",
           cluster: true,
           clusterMaxZoom: 14,

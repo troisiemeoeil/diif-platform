@@ -111,7 +111,7 @@ function HeaderContent({ children }) {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              Analyze data
+              Metsa Intelligence
             </TooltipContent>
           </Tooltip>
 
