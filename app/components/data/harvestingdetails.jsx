@@ -53,6 +53,7 @@ export default function Details() {
   const setSheetOpen = useAppStore((s) => s.setSheetOpen);
   const stemKey = useAppStore((s) => s.stemKey);
   const [stemDetails, setStemDetails] = useState(null);
+  const [selectedLog, setSelectedLog] = useState(null);
 
   
   useEffect(() => {
@@ -63,6 +64,10 @@ export default function Details() {
         const response = await axios.get(`/api/stemdata?stemKey=${stemKey}`);
         console.log(response.data);
         setStemDetails(response.data);
+        // Set the first log as selected by default
+        if (response.data?.Logs && response.data.Logs.length > 0) {
+          setSelectedLog(response.data.Logs[0]);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -127,10 +132,19 @@ export default function Details() {
 
           {/* Logs Tab */}
           <TabsContent value="logs" className="w-[65vw] flex mt-2 gap-2 max-h-[60vh] overflow-y-auto scrollbar-hide ">
-            <StemLogsTable stemDetails={stemDetails} />
+            <StemLogsTable stemDetails={stemDetails} onSelectLog={setSelectedLog} />
             <div className="w-[70vw]  min-h-[40vh] rounded-3xl">
               <h1 className="text-sm font-bold text-black">3D Model</h1>
-              <ThreeViewer modelPath="/models/log2.glb" YaxisOffset={-1} />
+              <ThreeViewer 
+                modelPath="/models/log2.glb" 
+                YaxisOffset={-1}
+                measurements={selectedLog?.LogMeasurement ? {
+                  topDiameter: selectedLog.LogMeasurement.TopOb,
+                  bottomDiameter: selectedLog.LogMeasurement.BotOb,
+                  length: selectedLog.LogMeasurement.LogLength,
+                  volume: selectedLog.LogMeasurement.Volume
+                } : undefined}
+              />
             </div>
           </TabsContent>
         </Tabs>
@@ -142,7 +156,7 @@ export default function Details() {
   );
 }
 
-export function StemLogsTable({ stemDetails }) {
+export function StemLogsTable({ stemDetails, onSelectLog }) {
 
 
   const [similar, setSimilar] = useState(null)
@@ -188,7 +202,16 @@ export function StemLogsTable({ stemDetails }) {
   }
 
   return (
-    <Accordion type="single" collapsible className="w-full h-full overflow-y-scroll scrollbar-hide">
+    <Accordion 
+      type="single" 
+      collapsible 
+      className="w-full h-full overflow-y-scroll scrollbar-hide"
+      onValueChange={(value) => {
+        const selectedLog = logs.find(log => `log-${log.LogKey}` === value);
+        if (selectedLog) onSelectLog(selectedLog);
+      }}
+      defaultValue={logs.length > 0 ? `log-${logs[0].LogKey}` : undefined}
+    >
       {logs.map((log) => {
 
         // Flatten the log object for display in the table
@@ -196,7 +219,7 @@ export function StemLogsTable({ stemDetails }) {
         const logId = `log-${log.LogKey}`;
 
         return (
-          <AccordionItem className="w-full" key={logId} defaultValue={logId} value={logId}>
+          <AccordionItem className="w-full" key={logId} value={logId}>
 
             <AccordionTrigger className="font-semibold text-left">
               Log Number: {log.LogKey} (Product: {log.ProductKey})

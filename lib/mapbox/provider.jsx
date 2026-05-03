@@ -259,7 +259,7 @@ export default function MapProvider({
 
     map.current.flyTo({
       center: coordinates,
-      zoom: 15,
+      zoom: 5,
       speed: 0.75,
       curve: 1,
       essential: true,
